@@ -8,12 +8,13 @@
 // Ganti nilai di bawah ini dengan konfigurasi dari Firebase Console Anda (100% Gratis dari Google)
 // Buka https://console.firebase.google.com -> Buat Project -> Web App (</>) -> Salin firebaseConfig
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyCocJJXa8oTPc5uxxvlP16I9qX-ujVaK34",
+  authDomain: "tka-english-wajib-2025.firebaseapp.com",
+  projectId: "tka-english-wajib-2025",
+  storageBucket: "tka-english-wajib-2025.firebasestorage.app",
+  messagingSenderId: "32444504637",
+  appId: "1:32444504637:web:27f9b04f0095ece2312854",
+  measurementId: "G-G9G2EC9VP5"
 };
 
 // State Status Firebase
