@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>MPI TKA ENGLISH WAJIB 2025 — Student Worksheet & Reasoning Mode (20 Soal)</title>
+  <meta name="description" content="Lembar Kerja Siswa Interaktif (Student Worksheet & Reasoning) TKA Bahasa Inggris SMA 2025 - 20 Soal dengan Kolom Justifikasi Alasan dan Bukti Teks.">
+  
+  <!-- Google Fonts: Inter & Merriweather -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Student Specific Styles & Mobile Optimizations */
+    .student-badge {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      font-weight: 800;
+      font-size: 0.85rem;
+      padding: 5px 12px;
+      border-radius: var(--radius-sm);
+      letter-spacing: 0.05em;
+    }
+
+    .reasoning-box-wrapper {
+      background: var(--bg-card-alt);
+      border: 1.5px solid var(--border-color);
+      border-left: 4px solid var(--academic-blue);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      margin-top: 18px;
+      margin-bottom: 22px;
+    }
+
+    .reasoning-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+
+    .reasoning-subtext {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+
+    .student-reason-textarea {
+      width: 100%;
+      min-height: 95px;
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--border-color);
+      background: var(--bg-card);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      resize: vertical;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .student-reason-textarea:focus {
+      outline: none;
+      border-color: var(--academic-blue);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    /* Student Identity Card */
+    .student-id-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 24px 28px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      align-items: center;
+    }
+
+    .student-input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .student-input-label {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .student-input-field {
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--border-color);
+      background: var(--bg-card-alt);
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .student-input-field:focus {
+      outline: none;
+      border-color: var(--academic-blue);
+      background: var(--bg-card);
+    }
+
+    /* Mobile Quick Switch Bar */
+    .mobile-tab-switch {
+      display: none;
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 6px;
+      margin-bottom: 16px;
+      gap: 6px;
+    }
+
+    .mobile-switch-btn {
+      flex: 1;
+      padding: 10px;
+      border-radius: var(--radius-sm);
+      border: none;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      background: transparent;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .mobile-switch-btn.active {
+      background: var(--academic-blue);
+      color: white;
+    }
+
+    /* Printable Submission Sheet */
+    @media print {
+      .navbar, .btn, .workspace-top-bar, .practice-q-nav, .mobile-tab-switch, .nav-actions {
+        display: none !important;
+      }
+      body, .main-view, .app-container {
+        background: white !important;
+        color: black !important;
+        padding: 0 !important;
+      }
+      .print-sheet {
+        display: block !important;
+      }
+      .workspace-split-container {
+        display: block !important;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .mobile-tab-switch {
+        display: flex;
+      }
+      .workspace-split-container {
+        display: block;
+      }
+      .workspace-left-panel.mobile-hidden {
+        display: none;
+      }
+      .workspace-right-panel.mobile-hidden {
+        display: none;
+      }
+      .workspace-left-panel, .workspace-right-panel {
+        max-height: none;
+        padding: 20px 18px;
+      }
+      .navbar {
+        padding: 12px 16px;
+      }
+      .main-view {
+        padding: 12px 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- ==========================================
+         TOP NAVIGATION BAR (STUDENT MODE)
+    ========================================== -->
+    <header class="navbar">
+      <div class="nav-brand" onclick="setStudentView('dashboard')">
+        <img src="logo.png" alt="SMA Plus PGRI Cibinong" class="nav-brand-logo">
+        <div class="nav-brand-text">
+          <span class="student-badge">MODE SISWA</span>
+          <span class="brand-title">MPI English Wajib 2025</span>
+        </div>
+      </div>
+
+      <nav>
+        <ul class="nav-links">
+          <li class="nav-item active" data-view="dashboard" onclick="setStudentView('dashboard')">📊 Dashboard</li>
+          <li class="nav-item" data-view="vocab_lab" onclick="setStudentView('vocab_lab')">📚 Vocabulary Lab</li>
+          <li class="nav-item" data-view="tka_strategy" onclick="setStudentView('tka_strategy')">🎯 TKA Strategy</li>
+          <li class="nav-item" data-view="worksheet_summary" onclick="setStudentView('worksheet_summary')">📋 Lembar Jawaban Saya</li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <!-- Switch to Master/Teacher Mode -->
+        <a href="index.html" class="btn btn-secondary btn-sm" title="Beralih ke Mode Guru / Pembahasan Lengkap">👨‍🏫 Mode Master</a>
+        <!-- Theme Toggle -->
+        <button class="btn-theme-toggle" id="btn-theme-toggle" onclick="toggleStudentTheme()">
+          <span id="theme-icon">🌙</span> <span id="theme-label">Dark</span>
+        </button>
+        <button class="btn btn-danger btn-sm" onclick="openStudentResetModal()">🔄 Reset</button>
+      </div>
+    </header>
+
+    <!-- ==========================================
+         MAIN VIEWS
+    ========================================== -->
+    <main class="main-view">
+
+      <!-- 1. STUDENT DASHBOARD VIEW -->
+      <section id="view-dashboard" class="view-section active">
+        
+        <!-- Student Identity Form -->
+        <div class="student-id-card">
+          <div class="student-input-group">
+            <label class="student-input-label">Nama Siswa / Student Name:</label>
+            <input type="text" id="input-student-name" class="student-input-field" placeholder="Ketik nama lengkap Anda..." onchange="saveStudentProfile()">
+          </div>
+          <div class="student-input-group">
+            <label class="student-input-label">Kelas / Grade:</label>
+            <input type="text" id="input-student-class" class="student-input-field" placeholder="Contoh: XII-A / XII-B..." onchange="saveStudentProfile()">
+          </div>
+          <div class="student-input-group">
+            <label class="student-input-label">Sekolah / Institution:</label>
+            <input type="text" id="input-student-school" class="student-input-field" value="SMA Plus PGRI Cibinong" readonly>
+          </div>
+        </div>
+
+        <!-- Student Hero Banner -->
+        <div class="dashboard-hero-banner" style="background: linear-gradient(135deg, #065f46, #0f172a);">
+          <div>
+            <div class="dash-banner-title">🎓 Student Worksheet & Reasoning Hub (20 Soal)</div>
+            <p class="dash-banner-subtitle">
+              Pilih teks bacaan dan jawab soal TKA Bahasa Inggris SMA 2025. <strong>Tuliskan alasan & bukti teks</strong> di setiap nomor untuk melatih penalaran kritis (HOTS).
+            </p>
+          </div>
+          <div>
+            <button class="btn btn-primary btn-lg" style="background: white; color: #065f46;" onclick="openStudentWorkspace(1)">
+              📖 Mulai Text 1 →
+            </button>
+          </div>
+        </div>
+
+        <!-- Quick Hub Cards: Vocab Lab & TKA Strategy -->
+        <div class="dash-hub-grid">
+          <div class="dash-hub-card" onclick="setStudentView('vocab_lab')">
+            <div class="hub-card-left">
+              <div class="hub-icon-box" style="background: #dcfce7; color: #059669;">📚</div>
+              <div>
+                <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 4px;">Vocabulary Lab</h3>
+                <p style="font-size: 0.9rem; color: var(--text-muted);">Kosakata esensial, Audio Pengucapan, Flip Cards & Matching Game.</p>
+              </div>
+            </div>
+            <span class="btn btn-outline btn-sm">Buka Lab →</span>
+          </div>
+
+          <div class="dash-hub-card" onclick="setStudentView('tka_strategy')">
+            <div class="hub-card-left">
+              <div class="hub-icon-box" style="background: var(--accent-amber-light); color: var(--accent-amber);">🎯</div>
+              <div>
+                <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 4px;">TKA Strategy Guide</h3>
+                <p style="font-size: 0.9rem; color: var(--text-muted);">12 Formula & metode sistematis menjawab soal TKA 2025.</p>
+              </div>
+            </div>
+            <span class="btn btn-outline btn-sm">Buka Strategi →</span>
+          </div>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="overview-stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon" style="background: #dcfce7; color: #059669;">📝</div>
+            <div>
+              <div class="stat-val" id="student-stat-answered">0/20</div>
+              <div class="stat-label">Soal Terjawab</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background: var(--accent-cyan-light); color: var(--academic-blue);">✍️</div>
+            <div>
+              <div class="stat-val" id="student-stat-reasoned">0/20</div>
+              <div class="stat-label">Alasan Disertakan</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">📖</div>
+            <div>
+              <div class="stat-val">4 Texts</div>
+              <div class="stat-label">Materi Teks TKA</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="overflow: hidden; padding: 0;">
+              <img src="developer.jpg" alt="M. Falahaen J." style="width: 100%; height: 100%; object-fit: cover; object-position: top center; border-radius: var(--radius-md);">
+            </div>
+            <div>
+              <div class="stat-val" style="font-size: 1.1rem; font-weight: 800;">M. Falahaen J., M.Pd.</div>
+              <div class="stat-label">Guru Pembimbing</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Text Cards Grid -->
+        <div class="text-cards-grid" id="student-dashboard-cards">
+          <!-- Injected dynamically -->
+        </div>
+      </section>
+
+      <!-- 2. STUDENT WORKSPACE (SIDE-BY-SIDE ON DESKTOP, RESPONSIVE ON MOBILE) -->
+      <section id="view-student_workspace" class="view-section">
+        
+        <!-- Top Toolbar -->
+        <div class="workspace-top-bar">
+          <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+            <button class="btn btn-secondary btn-sm" onclick="setStudentView('dashboard')">← Dashboard</button>
+            <div id="student-ws-title" style="font-size: 1.15rem; font-weight: 800; color: var(--text-main);"></div>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div class="font-size-control-group">
+              <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-right: 4px;">Ukuran Teks:</span>
+              <button class="btn-font-ctrl" onclick="changeStudentFontSize(-1)">A-</button>
+              <button class="btn-font-ctrl" onclick="changeStudentFontSize(0)">Default</button>
+              <button class="btn-font-ctrl" onclick="changeStudentFontSize(1)">A+</button>
+              <button class="btn-font-ctrl" onclick="toggleStudentFontFamily()" style="margin-left: 6px;">Font: <span id="student-font-label">Serif</span></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mobile View Toggle (HP / Tablet) -->
+        <div class="mobile-tab-switch">
+          <button class="mobile-switch-btn active" id="btn-mobile-read" onclick="setMobileViewTab('read')">📖 1. Baca Teks</button>
+          <button class="mobile-switch-btn" id="btn-mobile-quiz" onclick="setMobileViewTab('quiz')">✏️ 2. Soal & Alasan</button>
+        </div>
+
+        <!-- Split Grid Workspace -->
+        <div class="workspace-split-container">
+          
+          <!-- LEFT PANEL: READING TEXT -->
+          <div class="workspace-left-panel" id="student-reading-panel">
+            <h2 class="reading-article-title" id="student-reading-title"></h2>
+            <div class="reading-citation" id="student-reading-citation"></div>
+            <div id="student-reading-content">
+              <!-- Paragraphs -->
+            </div>
+          </div>
+
+          <!-- RIGHT PANEL: QUESTIONS & REASONING (NO KEYS / NO EXPLANATIONS EXPOSED) -->
+          <div class="workspace-right-panel" id="student-practice-panel">
+            
+            <div class="practice-header-bar">
+              <span style="font-weight: 800; color: var(--text-main); font-size: 1.05rem;">Butir Soal:</span>
+              <div class="practice-q-nav" id="student-practice-q-nav">
+                <!-- Pills -->
+              </div>
+            </div>
+
+            <!-- Question Canvas -->
+            <div id="student-practice-canvas">
+              <!-- Injected dynamically -->
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- 3. VOCABULARY LAB (STUDENT VIEW) -->
+      <section id="view-vocab_lab" class="view-section">
+        <div class="global-vocab-container">
+          <div style="background: var(--bg-card); padding: 24px 30px; border-radius: 14px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+            <div>
+              <h2 style="font-size: 1.6rem; font-weight: 900; color: var(--text-main); margin-bottom: 4px;">📚 Vocabulary Lab</h2>
+              <p style="font-size: 0.95rem; color: var(--text-muted);">Pelajari kosakata sulit dengan audio pengucapan, kartu flip, dan kuis konteks.</p>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="setStudentView('dashboard')">← Kembali ke Dashboard</button>
+          </div>
+
+          <!-- Text Filter -->
+          <div class="vocab-filter-pills">
+            <button class="vocab-filter-pill active" data-textfilter="all" onclick="filterStudentVocab('all')">Semua Teks (34 Kata)</button>
+            <button class="vocab-filter-pill" data-textfilter="1" onclick="filterStudentVocab(1)">Text 1: The Lion & Mouse (10)</button>
+            <button class="vocab-filter-pill" data-textfilter="2" onclick="filterStudentVocab(2)">Text 2: Study Techniques (8)</button>
+            <button class="vocab-filter-pill" data-textfilter="3" onclick="filterStudentVocab(3)">Text 3: False Lion King (8)</button>
+            <button class="vocab-filter-pill" data-textfilter="4" onclick="filterStudentVocab(4)">Text 4: Great Barrier Reef (8)</button>
+          </div>
+
+          <!-- Activity Nav -->
+          <div class="vocab-activity-nav">
+            <button class="vocab-mode-btn active" data-mode="flipcard" onclick="setStudentVocabActivity('flipcard')">🎴 Activity 1: Flip Cards</button>
+            <button class="vocab-mode-btn" data-mode="matching" onclick="setStudentVocabActivity('matching')">🧩 Activity 2: Match the Word</button>
+            <button class="vocab-mode-btn" data-mode="context" onclick="setStudentVocabActivity('context')">💡 Activity 3: Context Challenge</button>
+            <button class="vocab-mode-btn" data-mode="list" onclick="setStudentVocabActivity('list')">📋 Word Master Table</button>
+          </div>
+
+          <div id="student-vocab-content-area"></div>
+        </div>
+      </section>
+
+      <!-- 4. TKA STRATEGY (STUDENT VIEW) -->
+      <section id="view-tka_strategy" class="view-section">
+        <div class="strategy-container">
+          <div style="background: var(--bg-card); padding: 24px 30px; border-radius: 14px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+            <div>
+              <h2 style="font-size: 1.6rem; font-weight: 900; color: var(--text-main); margin-bottom: 4px;">🎯 TKA Strategy Guide</h2>
+              <p style="font-size: 0.95rem; color: var(--text-muted);">12 Formula dan langkah sistematis dalam menjawab soal TKA 2025.</p>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="setStudentView('dashboard')">← Kembali ke Dashboard</button>
+          </div>
+
+          <div class="strategy-grid" id="student-strategy-cards-container"></div>
+        </div>
+      </section>
+
+      <!-- 5. WORKSHEET SUMMARY & SUBMISSION (STUDENT VIEW) -->
+      <section id="view-worksheet_summary" class="view-section">
+        <div id="student-summary-container">
+          <!-- Summary Sheet & Printable View -->
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Modals -->
+    <div class="modal-overlay" id="student-reset-modal">
+      <div class="modal-content">
+        <h3 style="font-size: 1.35rem; font-weight: 800; color: var(--accent-red); margin-bottom: 12px;">⚠️ Reset Lembar Kerja Siswa?</h3>
+        <p style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 24px; line-height: 1.6;">
+          Apakah Anda yakin ingin mengulang dan menghapus semua jawaban serta alasan yang telah Anda tulis?
+        </p>
+        <div style="display: flex; justify-content: flex-end; gap: 12px;">
+          <button class="btn btn-secondary" onclick="closeStudentModal('student-reset-modal')">Batal</button>
+          <button class="btn btn-danger" onclick="confirmStudentReset()">Ya, Reset Lembar Kerja</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast-container" id="toast-container"></div>
+
+  </div>
+
+  <!-- Firebase SDK (v8 compat for direct browser usage) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="firebase-config.js"></script>
+
+  <!-- Scripts -->
+  <script src="data.js"></script>
+  <script src="student.js"></script>
+</body>
+</html>
