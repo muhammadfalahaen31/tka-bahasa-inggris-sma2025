@@ -1060,24 +1060,30 @@ async function submitStudentWorksheetOnline() {
 
   TKA_DATA.questions.forEach(q => {
     const studentRec = StudentState.answers[q.id] || { answer: null, reason: '' };
+    const correct = q.officialAnswer || q.correctAnswer;
     let isCorrect = false;
 
-    if (studentRec.answer !== null && studentRec.answer !== undefined) {
+    if (studentRec.answer !== null && studentRec.answer !== undefined && correct !== undefined && correct !== null) {
       if (q.format === 'multiple_choice') {
-        isCorrect = String(studentRec.answer).toUpperCase() === String(q.correctAnswer).toUpperCase();
+        isCorrect = String(studentRec.answer).trim().toUpperCase() === String(correct).trim().toUpperCase();
       } else if (q.format === 'multi_select') {
-        const studentSet = new Set(studentRec.answer || []);
-        const correctSet = new Set(q.correctAnswer || []);
+        const studentArr = Array.isArray(studentRec.answer) ? studentRec.answer.map(s => String(s).trim().toUpperCase()) : [];
+        const correctArr = Array.isArray(correct) ? correct.map(s => String(s).trim().toUpperCase()) : [];
+        const studentSet = new Set(studentArr);
+        const correctSet = new Set(correctArr);
         isCorrect = studentSet.size === correctSet.size && [...studentSet].every(val => correctSet.has(val));
       } else if (q.format === 'categorization') {
-        if (typeof studentRec.answer === 'object' && studentRec.answer !== null) {
-          const keys = Object.keys(q.correctAnswer || {});
-          isCorrect = keys.length > 0 && keys.every(k => studentRec.answer[k] === q.correctAnswer[k]);
+        if (typeof studentRec.answer === 'object' && studentRec.answer !== null && typeof correct === 'object' && correct !== null) {
+          const keys = Object.keys(correct);
+          isCorrect = keys.length > 0 && keys.every(k => String(studentRec.answer[k]).trim() === String(correct[k]).trim());
         }
       }
 
       if (isCorrect) score++;
-      if (studentRec.reason && studentRec.reason.trim().length > 0) reasonedCount++;
+    }
+
+    if (studentRec.reason && studentRec.reason.trim().length > 0) {
+      reasonedCount++;
     }
 
     processedAnswers[q.id] = {

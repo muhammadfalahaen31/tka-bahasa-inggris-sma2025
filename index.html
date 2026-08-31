@@ -40,8 +40,8 @@
       </nav>
 
       <div class="nav-actions">
-        <!-- Switch to Student Mode -->
-        <a href="student.html" class="btn btn-success btn-sm" title="Buka Lembar Kerja Mode Siswa (Tanpa Kunci Jawaban & dengan Kolom Alasan)">🎓 Mode Siswa</a>
+        <!-- Lock Dashboard -->
+        <button class="btn btn-secondary btn-sm" onclick="lockTeacherDashboard()" title="Kunci Dashboard Guru">🔒 Kunci</button>
         <!-- Dark/Light Mode Switcher -->
         <button class="btn-theme-toggle" id="btn-theme-toggle" onclick="toggleTheme()">
           <span id="theme-icon">🌙</span> <span id="theme-label">Dark Mode</span>
@@ -433,6 +433,36 @@
     <!-- ==========================================
          MODALS & OVERLAYS
     ========================================== -->
+    <!-- Teacher PIN Security Lock Screen Modal -->
+    <div class="modal-overlay" id="teacher-pin-modal" style="backdrop-filter: blur(14px); background: rgba(15, 23, 42, 0.92); z-index: 9999;">
+      <div class="modal-content" style="max-width: 440px; text-align: center; padding: 40px 32px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border: 2px solid var(--academic-blue);">
+        <div style="width: 72px; height: 72px; margin: 0 auto 16px; background: linear-gradient(135deg, #1e40af, #0284c7); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; box-shadow: 0 4px 14px rgba(30, 64, 175, 0.4);">
+          🔐
+        </div>
+        <span class="badge badge-blue" style="margin-bottom: 8px;">Akses Khusus Guru & Pembimbing</span>
+        <h3 style="font-size: 1.45rem; font-weight: 900; color: var(--text-main); margin-bottom: 8px;">Masukkan PIN Guru</h3>
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; line-height: 1.5;">
+          Halaman ini memuat kunci jawaban resmi, pembahasan, dan live rekap nilai siswa.
+        </p>
+
+        <form id="teacher-pin-form" onsubmit="verifyTeacherPIN(event)" style="display: flex; flex-direction: column; gap: 16px;">
+          <div>
+            <input type="password" id="input-teacher-pin" maxlength="4" placeholder="••••" autocomplete="off"
+                   style="width: 190px; text-align: center; font-size: 2.2rem; letter-spacing: 0.4em; padding: 10px 14px; border-radius: 12px; border: 2px solid var(--border-color); background: var(--bg-card-alt); color: var(--text-main); font-weight: 800; font-family: monospace;">
+          </div>
+          <div id="pin-error-msg" style="color: #ef4444; font-size: 0.88rem; font-weight: 700; display: none;">
+            ❌ PIN salah! Silakan coba lagi.
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; font-size: 1.05rem;">
+            🔓 Buka Dashboard Guru
+          </button>
+        </form>
+        <div style="margin-top: 22px; font-size: 0.84rem; color: var(--text-muted);">
+          Bukan Guru? <a href="student.html" style="color: var(--academic-blue); font-weight: 700; text-decoration: underline;">Buka Lembar Kerja Siswa →</a>
+        </div>
+      </div>
+    </div>
+
     <!-- Reset Confirmation Modal -->
     <div class="modal-overlay" id="reset-confirm-modal">
       <div class="modal-content">

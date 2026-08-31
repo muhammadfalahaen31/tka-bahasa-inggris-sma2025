@@ -35,6 +35,9 @@ const AppState = {
   fullTestCompleted: false
 };
 
+const TEACHER_PIN = "3110";
+const PIN_AUTH_KEY = "mpi_teacher_authenticated_v1";
+
 // ==========================================
 // INITIALIZATION & THEME HANDLING
 // ==========================================
@@ -43,7 +46,49 @@ function initApp() {
   loadProgress();
   setupGlobalEvents();
   initLiveSubmissionsListener();
+  checkTeacherAuth();
   renderApp();
+}
+
+function checkTeacherAuth() {
+  const isAuth = sessionStorage.getItem(PIN_AUTH_KEY) === "true";
+  const pinModal = document.getElementById("teacher-pin-modal");
+  if (pinModal) {
+    if (isAuth) {
+      pinModal.classList.remove("active");
+    } else {
+      pinModal.classList.add("active");
+      setTimeout(() => {
+        const pinInput = document.getElementById("input-teacher-pin");
+        if (pinInput) pinInput.focus();
+      }, 300);
+    }
+  }
+}
+
+function verifyTeacherPIN(e) {
+  if (e) e.preventDefault();
+  const pinInput = document.getElementById("input-teacher-pin");
+  const errorMsg = document.getElementById("pin-error-msg");
+  if (!pinInput) return;
+
+  if (pinInput.value.trim() === TEACHER_PIN) {
+    sessionStorage.setItem(PIN_AUTH_KEY, "true");
+    const pinModal = document.getElementById("teacher-pin-modal");
+    if (pinModal) pinModal.classList.remove("active");
+    showToast("✅ Berhasil masuk! Selamat datang, Pak Falahaen.", "success");
+    if (errorMsg) errorMsg.style.display = "none";
+  } else {
+    if (errorMsg) errorMsg.style.display = "block";
+    pinInput.value = "";
+    pinInput.focus();
+  }
+}
+
+function lockTeacherDashboard() {
+  sessionStorage.removeItem(PIN_AUTH_KEY);
+  checkTeacherAuth();
+  showToast("Layar Dashboard Guru telah dikunci.", "info");
 }
 
 function loadTheme() {
@@ -1548,6 +1593,40 @@ function refreshSubmissionsManually() {
   }
 }
 
+function computeSubmissionScore(sub) {
+  if (!sub || !sub.answers) return { score: sub.score || 0, reasonedCount: sub.reasonedCount || 0 };
+  let calculatedScore = 0;
+  let calculatedReasoned = 0;
+
+  TKA_DATA.questions.forEach(q => {
+    const qRec = sub.answers[q.id];
+    if (qRec) {
+      const correct = q.officialAnswer || q.correctAnswer;
+      let isCorrect = false;
+      if (qRec.answer !== null && qRec.answer !== undefined && correct !== undefined && correct !== null) {
+        if (q.format === 'multiple_choice') {
+          isCorrect = String(qRec.answer).trim().toUpperCase() === String(correct).trim().toUpperCase();
+        } else if (q.format === 'multi_select') {
+          const studentArr = Array.isArray(qRec.answer) ? qRec.answer.map(s => String(s).trim().toUpperCase()) : [];
+          const correctArr = Array.isArray(correct) ? correct.map(s => String(s).trim().toUpperCase()) : [];
+          const studentSet = new Set(studentArr);
+          const correctSet = new Set(correctArr);
+          isCorrect = studentSet.size === correctSet.size && [...studentSet].every(val => correctSet.has(val));
+        } else if (q.format === 'categorization') {
+          if (typeof qRec.answer === 'object' && qRec.answer !== null && typeof correct === 'object' && correct !== null) {
+            const keys = Object.keys(correct);
+            isCorrect = keys.length > 0 && keys.every(k => String(qRec.answer[k]).trim() === String(correct[k]).trim());
+          }
+        }
+      }
+      if (isCorrect) calculatedScore++;
+      if (qRec.reason && qRec.reason.trim().length > 0) calculatedReasoned++;
+    }
+  });
+
+  return { score: calculatedScore, reasonedCount: calculatedReasoned };
+}
+
 function renderLiveSubmissions() {
   const container = document.getElementById('live-submissions-table-area');
   if (!container) return;
@@ -1559,10 +1638,11 @@ function renderLiveSubmissions() {
   const classesSet = new Set();
 
   AppState.submissions.forEach(sub => {
-    const score = sub.score || 0;
+    const computed = computeSubmissionScore(sub);
+    const score = computed.score;
     totalScoreSum += score;
     if (score > highestScore) highestScore = score;
-    totalReasonsCount += (sub.reasonedCount || 0);
+    totalReasonsCount += computed.reasonedCount;
     if (sub.studentClass) classesSet.add(sub.studentClass.trim());
   });
 
@@ -1615,9 +1695,9 @@ function filterLiveSubmissionsTable() {
 
   // Sort
   if (sortVal === 'score_desc') {
-    filtered.sort((a, b) => (b.score || 0) - (a.score || 0));
+    filtered.sort((a, b) => computeSubmissionScore(b).score - computeSubmissionScore(a).score);
   } else if (sortVal === 'score_asc') {
-    filtered.sort((a, b) => (a.score || 0) - (b.score || 0));
+    filtered.sort((a, b) => computeSubmissionScore(a).score - computeSubmissionScore(b).score);
   } else if (sortVal === 'name_asc') {
     filtered.sort((a, b) => (a.studentName || '').localeCompare(b.studentName || ''));
   } else {
@@ -1665,9 +1745,10 @@ function filterLiveSubmissionsTable() {
   `;
 
   filtered.forEach((sub, idx) => {
-    const score = sub.score || 0;
+    const computed = computeSubmissionScore(sub);
+    const score = computed.score;
     const accuracy = Math.round((score / 20) * 100);
-    const reasoned = sub.reasonedCount || 0;
+    const reasoned = computed.reasonedCount;
     
     let scoreBadge = `<span class="badge badge-green">${score}/20 (${accuracy}%)</span>`;
     if (accuracy < 60) scoreBadge = `<span class="badge badge-amber">${score}/20 (${accuracy}%)</span>`;
@@ -1711,9 +1792,10 @@ function openStudentSubmissionDetail(submissionId) {
 
   modalTitle.textContent = `${sub.studentName || 'Siswa'} (${sub.studentClass || '-'})`;
 
-  const score = sub.score || 0;
+  const computed = computeSubmissionScore(sub);
+  const score = computed.score;
   const accuracy = Math.round((score / 20) * 100);
-  const reasoned = sub.reasonedCount || 0;
+  const reasoned = computed.reasonedCount;
 
   let bodyHtml = `
     <!-- Top Meta Stats -->
@@ -1737,17 +1819,36 @@ function openStudentSubmissionDetail(submissionId) {
   `;
 
   TKA_DATA.questions.forEach(q => {
-    const qRecord = (sub.answers && sub.answers[q.id]) || { answer: null, reason: '', isCorrect: false };
-    const isCorrect = qRecord.isCorrect;
+    const qRecord = (sub.answers && sub.answers[q.id]) || { answer: null, reason: '' };
+    const correct = q.officialAnswer || q.correctAnswer;
+    let isCorrect = false;
+
+    if (qRecord.answer !== null && qRecord.answer !== undefined && correct !== undefined && correct !== null) {
+      if (q.format === 'multiple_choice') {
+        isCorrect = String(qRecord.answer).trim().toUpperCase() === String(correct).trim().toUpperCase();
+      } else if (q.format === 'multi_select') {
+        const studentArr = Array.isArray(qRecord.answer) ? qRecord.answer.map(s => String(s).trim().toUpperCase()) : [];
+        const correctArr = Array.isArray(correct) ? correct.map(s => String(s).trim().toUpperCase()) : [];
+        const studentSet = new Set(studentArr);
+        const correctSet = new Set(correctArr);
+        isCorrect = studentSet.size === correctSet.size && [...studentSet].every(val => correctSet.has(val));
+      } else if (q.format === 'categorization') {
+        if (typeof qRecord.answer === 'object' && qRecord.answer !== null && typeof correct === 'object' && correct !== null) {
+          const keys = Object.keys(correct);
+          isCorrect = keys.length > 0 && keys.every(k => String(qRecord.answer[k]).trim() === String(correct[k]).trim());
+        }
+      }
+    }
+
     const hasReason = qRecord.reason && qRecord.reason.trim().length > 0;
 
     let ansDisplay = '<em>(Tidak Dijawab)</em>';
     if (qRecord.answer !== null && qRecord.answer !== undefined) {
       if (q.format === 'multiple_choice') {
-        const opt = q.options.find(o => o.key === qRecord.answer);
+        const opt = q.options.find(o => String(o.key).trim() === String(qRecord.answer).trim());
         ansDisplay = `<strong>Opsi (${qRecord.answer}):</strong> ${opt ? escapeHtml(opt.text) : ''}`;
       } else if (q.format === 'multi_select') {
-        ansDisplay = `<strong>Pilihan:</strong> [${qRecord.answer.join(', ')}]`;
+        ansDisplay = `<strong>Pilihan:</strong> [${Array.isArray(qRecord.answer) ? qRecord.answer.join(', ') : qRecord.answer}]`;
       } else if (q.format === 'categorization') {
         ansDisplay = Object.keys(qRecord.answer).map(k => `${k}: ${qRecord.answer[k]}`).join(' | ');
       }
@@ -1791,9 +1892,10 @@ function exportSubmissionsToCSV() {
   csvContent += "No,Nama Siswa,Kelas,Skor (dari 20),Persentase Akurasi,Jumlah Alasan HOTS,Waktu Submit\n";
 
   AppState.submissions.forEach((s, idx) => {
-    const accuracy = Math.round(((s.score || 0) / 20) * 100);
+    const computed = computeSubmissionScore(s);
+    const accuracy = Math.round((computed.score / 20) * 100);
     const dateStr = s.clientTimestamp ? new Date(s.clientTimestamp).toLocaleString('id-ID') : '-';
-    csvContent += `"${idx + 1}","${(s.studentName || '').replace(/"/g, '""')}","${(s.studentClass || '').replace(/"/g, '""')}","${s.score || 0}","${accuracy}%","${s.reasonedCount || 0}","${dateStr}"\n`;
+    csvContent += `"${idx + 1}","${(s.studentName || '').replace(/"/g, '""')}","${(s.studentClass || '').replace(/"/g, '""')}","${computed.score}","${accuracy}%","${computed.reasonedCount}","${dateStr}"\n`;
   });
 
   const encodedUri = encodeURI(csvContent);
