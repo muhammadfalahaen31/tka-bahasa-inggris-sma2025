@@ -151,12 +151,16 @@ function setStudentView(viewName, textId = null) {
 
   document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.mobile-nav-item').forEach(el => el.classList.remove('active'));
 
   const activeViewEl = document.getElementById(`view-${viewName}`);
   if (activeViewEl) activeViewEl.classList.add('active');
 
   const activeNavEl = document.querySelector(`.nav-item[data-view="${viewName}"]`);
   if (activeNavEl) activeNavEl.classList.add('active');
+
+  const activeMobNavEl = document.querySelector(`.mobile-nav-item[data-mobview="${viewName}"]`);
+  if (activeMobNavEl) activeMobNavEl.classList.add('active');
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
   renderStudentApp();
@@ -341,6 +345,10 @@ function renderStudentQuestions(text) {
         </button>
       `;
     }).join('');
+  // Update mobile tab switch label with active question number
+  const btnQuiz = document.getElementById('btn-mobile-quiz');
+  if (btnQuiz) {
+    btnQuiz.innerHTML = `✏️ 2. Soal #${currentQ.number} & Alasan`;
   }
 
   const canvas = document.getElementById('student-practice-canvas');
@@ -523,6 +531,11 @@ function jumpStudentQuestion(idx) {
   StudentState.currentQuestionIndex = idx;
   const text = TKA_DATA.texts.find(t => t.id === StudentState.selectedTextId);
   if (text) renderStudentQuestions(text);
+  if (window.innerWidth <= 900) {
+    setMobileViewTab('quiz');
+    const panelQuiz = document.getElementById('student-practice-panel');
+    if (panelQuiz) panelQuiz.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 }
 
 function prevStudentQuestion() {
@@ -530,6 +543,11 @@ function prevStudentQuestion() {
     StudentState.currentQuestionIndex--;
     const text = TKA_DATA.texts.find(t => t.id === StudentState.selectedTextId);
     if (text) renderStudentQuestions(text);
+    if (window.innerWidth <= 900) {
+      setMobileViewTab('quiz');
+      const panelQuiz = document.getElementById('student-practice-panel');
+      if (panelQuiz) panelQuiz.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 }
 
@@ -540,6 +558,11 @@ function saveAndNextStudentQuestion(qId) {
     StudentState.currentQuestionIndex++;
     renderStudentQuestions(text);
     showStudentToast('Jawaban tersimpan!', 'success');
+    if (window.innerWidth <= 900) {
+      setMobileViewTab('quiz');
+      const panelQuiz = document.getElementById('student-practice-panel');
+      if (panelQuiz) panelQuiz.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 }
 

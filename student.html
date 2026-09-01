@@ -61,7 +61,7 @@
       background: var(--bg-card);
       color: var(--text-main);
       font-family: var(--font-sans);
-      font-size: 0.95rem;
+      font-size: 1rem; /* 16px to prevent iOS auto zoom */
       line-height: 1.5;
       resize: vertical;
       transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -102,13 +102,13 @@
     }
 
     .student-input-field {
-      padding: 10px 14px;
+      padding: 12px 14px;
       border-radius: var(--radius-sm);
       border: 1.5px solid var(--border-color);
       background: var(--bg-card-alt);
       color: var(--text-main);
       font-family: inherit;
-      font-size: 0.95rem;
+      font-size: 1rem; /* 16px to prevent iOS zoom */
       font-weight: 600;
     }
 
@@ -124,33 +124,103 @@
       width: 100%;
       background: var(--bg-card);
       border: 1px solid var(--border-color);
-      border-radius: var(--radius-md);
+      border-radius: 12px;
       padding: 6px;
       margin-bottom: 16px;
-      gap: 6px;
+      gap: 8px;
+      box-shadow: var(--shadow-sm);
+      position: sticky;
+      top: 60px;
+      z-index: 90;
     }
 
     .mobile-switch-btn {
       flex: 1;
-      padding: 10px;
-      border-radius: var(--radius-sm);
+      padding: 12px 10px;
+      border-radius: 8px;
       border: none;
-      font-size: 0.9rem;
-      font-weight: 700;
+      font-size: 0.95rem;
+      font-weight: 800;
       cursor: pointer;
       background: transparent;
       color: var(--text-muted);
       text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
     }
 
     .mobile-switch-btn.active {
-      background: var(--academic-blue);
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
       color: white;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+    }
+
+    /* Mobile Floating Jump to Question Button on Reading Panel */
+    .mobile-read-action-bar {
+      display: none;
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    /* Mobile App Bottom Navigation Bar */
+    .mobile-bottom-nav {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      background: var(--bg-nav);
+      border-top: 1px solid var(--border-color);
+      z-index: 1000;
+      padding: 0 12px;
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+      box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.15);
+      align-items: center;
+      justify-content: space-around;
+    }
+
+    .mobile-nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      padding: 8px 4px;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .mobile-nav-item:active,
+    .mobile-nav-item.active {
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.12);
+    }
+
+    .mobile-nav-icon {
+      font-size: 1.3rem;
+      line-height: 1;
+    }
+
+    .mobile-nav-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
     }
 
     /* Printable Submission Sheet */
     @media print {
-      .navbar, .btn, .workspace-top-bar, .practice-q-nav, .mobile-tab-switch, .nav-actions {
+      .navbar, .btn, .workspace-top-bar, .practice-q-nav, .mobile-tab-switch, .nav-actions, .mobile-bottom-nav {
         display: none !important;
       }
       body, .main-view, .app-container {
@@ -166,28 +236,120 @@
       }
     }
 
-    @media (max-width: 900px) {
+    /* Mobile Phone Screen Styles (<= 768px) */
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 10px 16px;
+      }
+      .nav-links {
+        display: none; /* Replaced by modern bottom app nav */
+      }
+      .mobile-bottom-nav {
+        display: flex;
+      }
+      .main-view {
+        padding: 12px 14px 84px 14px; /* Space for bottom nav */
+      }
       .mobile-tab-switch {
         display: flex;
       }
       .workspace-split-container {
         display: block;
       }
-      .workspace-left-panel.mobile-hidden {
-        display: none;
-      }
+      .workspace-left-panel.mobile-hidden,
       .workspace-right-panel.mobile-hidden {
-        display: none;
+        display: none !important;
       }
       .workspace-left-panel, .workspace-right-panel {
         max-height: none;
-        padding: 20px 18px;
+        padding: 18px 14px;
+        border-radius: 12px;
       }
-      .navbar {
-        padding: 12px 16px;
+      .mobile-read-action-bar {
+        display: block;
       }
-      .main-view {
+      .workspace-top-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
         padding: 12px 14px;
+      }
+      .font-size-control-group {
+        width: 100%;
+        justify-content: space-between;
+      }
+      .practice-q-nav {
+        overflow-x: auto;
+        padding-bottom: 6px;
+        -webkit-overflow-scrolling: touch;
+      }
+      .q-nav-pill {
+        min-width: 44px;
+        min-height: 44px;
+        font-size: 1rem;
+      }
+      .option-card, .checkbox-option-card {
+        padding: 14px 16px;
+        min-height: 52px;
+        border-radius: 10px;
+      }
+      .opt-text {
+        font-size: 0.98rem;
+        line-height: 1.5;
+      }
+      .q-action-footer {
+        flex-direction: column;
+        gap: 12px;
+      }
+      .q-action-footer .btn {
+        width: 100%;
+        min-height: 48px;
+        font-size: 1rem;
+      }
+      .vocab-filter-pills, .vocab-activity-nav {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 8px;
+        -webkit-overflow-scrolling: touch;
+      }
+      .vocab-filter-pill, .vocab-mode-btn {
+        white-space: nowrap;
+        flex-shrink: 0;
+        padding: 8px 14px;
+        font-size: 0.85rem;
+      }
+      .flipcard-stage {
+        max-width: 100%;
+        height: 270px;
+      }
+      .dashboard-hero-banner {
+        padding: 22px 18px;
+      }
+      .dash-banner-title {
+        font-size: 1.45rem;
+      }
+      .dash-banner-subtitle {
+        font-size: 0.92rem;
+      }
+      .student-id-card {
+        padding: 18px 16px;
+        grid-template-columns: 1fr;
+      }
+      .overview-stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .stat-card {
+        padding: 14px 12px;
+        gap: 10px;
+      }
+      .stat-icon {
+        width: 42px;
+        height: 42px;
+        font-size: 1.3rem;
+      }
+      .stat-val {
+        font-size: 1.3rem;
       }
     }
   </style>
@@ -366,6 +528,11 @@
             <div id="student-reading-content">
               <!-- Paragraphs -->
             </div>
+            <div class="mobile-read-action-bar">
+              <button class="btn btn-primary btn-lg" onclick="setMobileViewTab('quiz')" style="width: 100%; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);">
+                ✏️ Lanjut Jawab Soal & Tulis Alasan →
+              </button>
+            </div>
           </div>
 
           <!-- RIGHT PANEL: QUESTIONS & REASONING (NO KEYS / NO EXPLANATIONS EXPOSED) -->
@@ -460,6 +627,26 @@
 
     <!-- Toast Notification -->
     <div class="toast-container" id="toast-container"></div>
+
+    <!-- Mobile Bottom App Navigation Bar (Sticky for Smartphone) -->
+    <nav class="mobile-bottom-nav">
+      <button class="mobile-nav-item active" data-mobview="dashboard" onclick="setStudentView('dashboard')">
+        <span class="mobile-nav-icon">📊</span>
+        <span class="mobile-nav-label">Dashboard</span>
+      </button>
+      <button class="mobile-nav-item" data-mobview="vocab_lab" onclick="setStudentView('vocab_lab')">
+        <span class="mobile-nav-icon">📚</span>
+        <span class="mobile-nav-label">Kosakata</span>
+      </button>
+      <button class="mobile-nav-item" data-mobview="tka_strategy" onclick="setStudentView('tka_strategy')">
+        <span class="mobile-nav-icon">🎯</span>
+        <span class="mobile-nav-label">Strategi</span>
+      </button>
+      <button class="mobile-nav-item" data-mobview="worksheet_summary" onclick="setStudentView('worksheet_summary')">
+        <span class="mobile-nav-icon">📋</span>
+        <span class="mobile-nav-label">Jawaban</span>
+      </button>
+    </nav>
 
   </div>
 
