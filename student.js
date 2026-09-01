@@ -345,6 +345,8 @@ function renderStudentQuestions(text) {
         </button>
       `;
     }).join('');
+  }
+
   // Update mobile tab switch label with active question number
   const btnQuiz = document.getElementById('btn-mobile-quiz');
   if (btnQuiz) {
