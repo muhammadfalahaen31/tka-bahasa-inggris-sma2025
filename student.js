@@ -231,11 +231,11 @@ function renderStudentDashboard() {
     const progressPercent = Math.round((tAnswered / textQuestions.length) * 100);
     const meta = genreMeta[idx] || { genre: text.genre, barClass: "theme-bar-1", excerpt: "" };
 
-    let statusBadge = `<span class="badge badge-gray">Belum Dikerjakan</span>`;
+    let statusBadge = `<span class="badge badge-gray">Not Started</span>`;
     if (isCompleted) {
-      statusBadge = `<span class="badge badge-green">✓ Selesai (${tAnswered}/${textQuestions.length})</span>`;
+      statusBadge = `<span class="badge badge-green">✓ Completed (${tAnswered}/${textQuestions.length})</span>`;
     } else if (tAnswered > 0) {
-      statusBadge = `<span class="badge badge-blue">⚡ Sedang Dikerjakan (${tAnswered}/${textQuestions.length})</span>`;
+      statusBadge = `<span class="badge badge-blue">⚡ In Progress (${tAnswered}/${textQuestions.length})</span>`;
     }
 
     const card = document.createElement('div');
@@ -253,8 +253,8 @@ function renderStudentDashboard() {
         
         <div class="card-meta-chips">
           <span class="meta-chip">📝 ${text.questionRange}</span>
-          <span class="meta-chip">✍️ ${tReasoned}/${textQuestions.length} Alasan</span>
-          <span class="meta-chip">📖 ${text.paragraphs.length} Paragraf / Poin</span>
+          <span class="meta-chip">✍️ ${tReasoned}/${textQuestions.length} Reasons</span>
+          <span class="meta-chip">📖 ${text.paragraphs.length} Paragraphs / Points</span>
         </div>
 
         <div class="card-progress-bar">
@@ -264,7 +264,7 @@ function renderStudentDashboard() {
 
       <div class="card-footer">
         <button class="btn btn-primary btn-sm" style="width: 100%; justify-content: center;" onclick="openStudentWorkspace(${text.id})">
-          ✏️ Buka Lembar Kerja & Jawab Soal →
+          ✏️ Open Worksheet & Solve Questions →
         </button>
       </div>
     `;
@@ -348,7 +348,7 @@ function renderStudentQuestions(text) {
   // Update mobile tab switch label with active question number
   const btnQuiz = document.getElementById('btn-mobile-quiz');
   if (btnQuiz) {
-    btnQuiz.innerHTML = `✏️ 2. Soal #${currentQ.number} & Alasan`;
+    btnQuiz.innerHTML = `✏️ 2. Question #${currentQ.number} & Reasoning`;
   }
 
   const canvas = document.getElementById('student-practice-canvas');
@@ -380,14 +380,14 @@ function renderStudentQuestions(text) {
   contentHtml += `
     <div class="reasoning-box-wrapper">
       <div class="reasoning-header">
-        <span>✍️ Mengapa Anda memilih jawaban ini? (Alasan & Bukti Teks):</span>
+        <span>✍️ Why did you choose this answer? (Reasoning & Textual Evidence):</span>
       </div>
       <p class="reasoning-subtext">
-        Tuliskan alasan analitis Anda dan kutip petunjuk kalimat/kata dari teks untuk mempertanggungjawabkan pilihan Anda:
+        Write your analytical justification and cite clues / keywords from the passage to justify your choice:
       </p>
       <textarea id="student-reason-input-${currentQ.id}" 
                 class="student-reason-textarea" 
-                placeholder="Contoh: Saya memilih opsi ini karena pada poin/paragraf ke-X dinyatakan bahwa... dan bukti kata kuncinya adalah..."
+                placeholder="Example: I chose this option because in paragraph/point X it states that... and the supporting keyword is..."
                 oninput="handleStudentReasonInput(${currentQ.id}, this.value)">${escapeHtml(savedRecord.reason || '')}</textarea>
     </div>
   `;
@@ -395,12 +395,12 @@ function renderStudentQuestions(text) {
   // Action footer
   contentHtml += `
     <div class="q-action-footer">
-      <button class="btn btn-secondary" onclick="prevStudentQuestion()" ${qIndex === 0 ? 'disabled' : ''}>← Sebelumnya</button>
+      <button class="btn btn-secondary" onclick="prevStudentQuestion()" ${qIndex === 0 ? 'disabled' : ''}>← Previous</button>
       <div style="display: flex; gap: 8px; flex-wrap: wrap;">
         ${qIndex < questions.length - 1 ? `
-          <button class="btn btn-primary" onclick="saveAndNextStudentQuestion(${currentQ.id})">Simpan & Lanjut →</button>
+          <button class="btn btn-primary" onclick="saveAndNextStudentQuestion(${currentQ.id})">Save & Next →</button>
         ` : `
-          <button class="btn btn-success btn-lg" onclick="finishStudentText(${text.id}, ${currentQ.id})">🏁 Simpan & Selesai Text ${text.id}</button>
+          <button class="btn btn-success btn-lg" onclick="finishStudentText(${text.id}, ${currentQ.id})">🏁 Save & Finish Text ${text.id}</button>
         `}
       </div>
     </div>
@@ -655,23 +655,23 @@ function renderStudentWorksheetSummary() {
     }
   });
 
-  const studentName = StudentState.profile.name || '(Belum Diisi)';
-  const studentClass = StudentState.profile.class || '(Belum Diisi)';
+  const studentName = StudentState.profile.name || '(Not Filled)';
+  const studentClass = StudentState.profile.class || '(Not Filled)';
 
   let html = `
     <div style="background: var(--bg-card); border-radius: 18px; border: 1px solid var(--border-color); padding: 36px; box-shadow: var(--shadow-md); margin-bottom: 30px;">
       
       <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-color); padding-bottom: 20px; margin-bottom: 24px; flex-wrap: wrap; gap: 14px;">
         <div>
-          <span class="badge badge-green" style="margin-bottom: 8px;">LEMBAR JAWABAN SISWA (STUDENT WORKSHEET)</span>
-          <h2 style="font-size: 1.8rem; font-weight: 900; color: var(--text-main); margin-bottom: 4px;">TKA Bahasa Inggris SMA 2025 (Wajib)</h2>
-          <p style="font-size: 0.95rem; color: var(--text-muted);">Laporan Jawaban Mandiri & Justifikasi Alasan Bukti Teks (Questions 1–20)</p>
+          <span class="badge badge-green" style="margin-bottom: 8px;">STUDENT WORKSHEET REPORT</span>
+          <h2 style="font-size: 1.8rem; font-weight: 900; color: var(--text-main); margin-bottom: 4px;">SMA English TKA 2025 (Core)</h2>
+          <p style="font-size: 0.95rem; color: var(--text-muted);">Independent Answer Sheet & Analytical Reasoning Report (Questions 1–20)</p>
         </div>
         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
           <button class="btn btn-primary" id="btn-submit-online" onclick="submitStudentWorksheetOnline()" style="background: linear-gradient(135deg, #059669, #047857); box-shadow: 0 4px 12px rgba(5, 150, 105, 0.4);">
-            🚀 Kirim Lembar Jawaban ke Guru (Online)
+            🚀 Submit Worksheet to Teacher (Online)
           </button>
-          <button class="btn btn-secondary" onclick="window.print()">🖨️ Cetak / PDF</button>
+          <button class="btn btn-secondary" onclick="window.print()">🖨️ Print / Save PDF</button>
           <button class="btn btn-outline" onclick="setStudentView('dashboard')">← Dashboard</button>
         </div>
       </div>
@@ -679,39 +679,39 @@ function renderStudentWorksheetSummary() {
       <!-- Identity Meta Box -->
       <div style="background: var(--bg-card-alt); border-radius: 12px; padding: 18px 24px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 28px;">
         <div>
-          <div style="font-size: 0.78rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Nama Siswa:</div>
+          <div style="font-size: 0.78rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Student Name:</div>
           <div style="font-size: 1.1rem; font-weight: 800; color: var(--text-main);">${escapeHtml(studentName)}</div>
         </div>
         <div>
-          <div style="font-size: 0.78rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Kelas:</div>
+          <div style="font-size: 0.78rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Grade / Class:</div>
           <div style="font-size: 1.1rem; font-weight: 800; color: var(--text-main);">${escapeHtml(studentClass)}</div>
         </div>
         <div>
-          <div style="font-size: 0.78rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Sekolah:</div>
+          <div style="font-size: 0.78rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">School / Institution:</div>
           <div style="font-size: 1rem; font-weight: 700; color: var(--text-main);">SMA Plus PGRI Cibinong</div>
         </div>
         <div>
-          <div style="font-size: 0.78rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Guru Pembimbing:</div>
+          <div style="font-size: 0.78rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Advisor Teacher:</div>
           <div style="font-size: 1rem; font-weight: 700; color: var(--text-main);">M. Falahaen Jiddan, M.Pd. Gr.</div>
         </div>
       </div>
 
       <!-- Questions & Justifications List -->
-      <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 18px;">📋 Rincian Jawaban & Alasan Pemilihan Siswa:</h3>
+      <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 18px;">📋 Question Breakdown & Student Reasoning:</h3>
 
       <div style="display: flex; flex-direction: column; gap: 18px;">
         ${TKA_DATA.questions.map(q => {
           const rec = StudentState.answers[q.id] || { answer: null, reason: '' };
-          let answerDisplay = '<em>(Belum Dijawab)</em>';
+          let answerDisplay = '<em>(Unanswered)</em>';
 
           if (rec.answer !== null && rec.answer !== undefined) {
             if (q.format === 'multiple_choice') {
               const optObj = q.options.find(o => o.key === rec.answer);
-              answerDisplay = `<strong>Opsi (${rec.answer}):</strong> ${optObj ? optObj.text : ''}`;
+              answerDisplay = `<strong>Selected (${rec.answer}):</strong> ${optObj ? optObj.text : ''}`;
             } else if (q.format === 'multi_select') {
-              answerDisplay = `<strong>Pilihan:</strong> Pernyataan [${rec.answer.join(', ')}]`;
+              answerDisplay = `<strong>Selected Options:</strong> [${rec.answer.join(', ')}]`;
             } else if (q.format === 'categorization') {
-              answerDisplay = `<strong>Kategori:</strong> ` + Object.keys(rec.answer).map(k => `${k}: ${rec.answer[k]}`).join(' | ');
+              answerDisplay = `<strong>Categorization:</strong> ` + Object.keys(rec.answer).map(k => `${k}: ${rec.answer[k]}`).join(' | ');
             }
           }
 
@@ -720,8 +720,8 @@ function renderStudentWorksheetSummary() {
           return `
             <div style="background: var(--bg-card-alt); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <span class="badge badge-blue">Text ${q.textId} • Soal #${q.number} (${q.type})</span>
-                <span class="badge ${rec.answer ? 'badge-green' : 'badge-gray'}">${rec.answer ? '✓ Terisi' : '○ Kosong'}</span>
+                <span class="badge badge-blue">Text ${q.textId} • Question #${q.number} (${q.type})</span>
+                <span class="badge ${rec.answer ? 'badge-green' : 'badge-gray'}">${rec.answer ? '✓ Answered' : '○ Empty'}</span>
               </div>
               
               <div style="font-weight: 700; font-size: 1.05rem; color: var(--text-main); margin-bottom: 10px; white-space: pre-line;">${escapeHtml(q.question)}</div>
@@ -731,9 +731,9 @@ function renderStudentWorksheetSummary() {
               </div>
 
               <div style="background: var(--accent-cyan-light); border-left: 4px solid var(--academic-blue); padding: 12px 16px; border-radius: 6px;">
-                <strong style="font-size: 0.88rem; color: var(--academic-blue);">✍️ Alasan & Bukti Teks dari Siswa:</strong>
+                <strong style="font-size: 0.88rem; color: var(--academic-blue);">✍️ Student Reasoning & Textual Evidence:</strong>
                 <p style="font-size: 0.92rem; color: var(--text-main); margin-top: 4px; line-height: 1.5; font-style: ${hasReason ? 'normal' : 'italic'};">
-                  ${hasReason ? escapeHtml(rec.reason) : 'Siswa belum menuliskan alasan untuk soal ini.'}
+                  ${hasReason ? escapeHtml(rec.reason) : 'No analytical reasoning provided for this question yet.'}
                 </p>
               </div>
             </div>
@@ -805,7 +805,7 @@ function renderStudentVocabFlipcards(vocabList, container) {
               <div class="word-title">${v.word}</div>
               <div class="pos-tag">${v.pos}</div>
             </div>
-            <div class="hint-text">👆 Klik untuk melihat arti & contoh</div>
+            <div class="hint-text">👆 Tap / Click to flip & view meaning</div>
           </div>
           <div class="flip-card-back">
             <div>
@@ -835,7 +835,7 @@ function renderStudentVocabMatching(vocabList, container) {
   let html = `
     <div style="background: var(--bg-card); padding: 26px; border-radius: 14px; border: 1px solid var(--border-color); margin-bottom: 20px;">
       <h3 style="font-size: 1.2rem; color: var(--text-main); margin-bottom: 6px; font-weight: 800;">🧩 Activity 2 — Match the Word</h3>
-      <p style="font-size: 0.92rem; color: var(--text-muted); margin-bottom: 22px;">Pilih kata bahasa Inggris di kiri, lalu pasangkan dengan artinya di kanan!</p>
+      <p style="font-size: 0.92rem; color: var(--text-muted); margin-bottom: 22px;">Select an English word on the left, then click its corresponding meaning on the right!</p>
       
       <div class="matching-game-grid">
         <div class="match-column" id="st-match-col-left">
@@ -855,7 +855,7 @@ function renderStudentVocabMatching(vocabList, container) {
       </div>
 
       <div style="margin-top: 24px; text-align: right;">
-        <button class="btn btn-secondary btn-sm" onclick="renderStudentVocabLab()">🔄 Reset Game</button>
+        <button class="btn btn-secondary btn-sm" onclick="renderStudentVocabLab()">🔄 Reset Matching Game</button>
       </div>
     </div>
   `;
@@ -888,11 +888,11 @@ function handleStudentMatchSelect(col, word) {
       if (leftEl) { leftEl.classList.remove('selected'); leftEl.classList.add('matched'); leftEl.innerHTML += ' ✓'; }
       if (rightEl) { rightEl.classList.remove('selected'); rightEl.classList.add('matched'); rightEl.innerHTML += ' ✓'; }
 
-      showStudentToast(`Benar: "${matched}"!`, 'success');
+      showStudentToast(`Correct match: "${matched}"!`, 'success');
       StudentState.matchingState.selectedLeft = null;
       StudentState.matchingState.selectedRight = null;
     } else {
-      showStudentToast('Belum tepat. Coba lagi!', 'error');
+      showStudentToast('Not quite right. Try again!', 'error');
       setTimeout(() => {
         document.querySelectorAll('.match-item.selected').forEach(el => el.classList.remove('selected'));
         StudentState.matchingState.selectedLeft = null;
@@ -916,7 +916,7 @@ function renderStudentVocabContextQuiz(vocabList, container) {
         <span style="font-size: 0.92rem; color: var(--text-muted); font-weight: 700;">Word ${currentIdx + 1} of ${vocabList.length}</span>
       </div>
 
-      <h3 style="font-size: 1.3rem; color: var(--text-main); margin-bottom: 16px; font-weight: 800;">Apa makna kata "<span style="color: var(--academic-blue);">${currentV.word}</span>" dalam konteks kalimat ini?</h3>
+      <h3 style="font-size: 1.3rem; color: var(--text-main); margin-bottom: 16px; font-weight: 800;">What is the contextual meaning of "<span style="color: var(--academic-blue);">${currentV.word}</span>" in this sentence?</h3>
       
       <div style="background: var(--bg-card-alt); border-left: 4px solid var(--academic-blue); padding: 18px; border-radius: 8px; font-family: var(--font-serif); font-size: 1.1rem; margin-bottom: 26px; color: var(--text-main);">
         "${currentV.context}"
@@ -966,13 +966,13 @@ function checkStudentContextAnswer(chosen, correct, el) {
     if (isRight) {
       feedbackBox.innerHTML = `
         <div style="background: var(--accent-green-light); color: var(--accent-green); padding: 16px; border-radius: 8px; font-weight: 700;">
-          ✓ Tepat! <strong>${correct}</strong> adalah makna kontekstual yang paling sesuai.
+          ✓ Correct! <strong>${correct}</strong> is the most accurate contextual meaning.
         </div>
       `;
     } else {
       feedbackBox.innerHTML = `
         <div style="background: var(--accent-red-light); color: var(--accent-red); padding: 16px; border-radius: 8px; font-weight: 700;">
-          ✗ Belum tepat. Makna yang benar adalah: <strong>${correct}</strong>.
+          ✗ Incorrect. The accurate meaning is: <strong>${correct}</strong>.
         </div>
       `;
     }
@@ -1051,7 +1051,7 @@ async function submitStudentWorksheetOnline() {
   const studentClass = (StudentState.profile.class || '').trim();
 
   if (!name) {
-    showStudentToast('Mohon isi Nama Lengkap Anda terlebih dahulu di bagian atas halaman.', 'error');
+    showStudentToast('Please enter your Full Name at the top of the page first.', 'error');
     const nameInput = document.getElementById('input-student-name');
     if (nameInput) {
       nameInput.scrollIntoView({ behavior: 'smooth' });
@@ -1061,7 +1061,7 @@ async function submitStudentWorksheetOnline() {
   }
 
   if (!studentClass) {
-    showStudentToast('Mohon isi Kelas Anda terlebih dahulu di bagian atas halaman.', 'error');
+    showStudentToast('Please enter your Grade / Class at the top of the page first.', 'error');
     const classInput = document.getElementById('input-student-class');
     if (classInput) {
       classInput.scrollIntoView({ behavior: 'smooth' });
@@ -1073,7 +1073,7 @@ async function submitStudentWorksheetOnline() {
   const submitBtn = document.getElementById('btn-submit-online');
   if (submitBtn) {
     submitBtn.disabled = true;
-    submitBtn.innerHTML = '⏳ Sedang Mengirim Data...';
+    submitBtn.innerHTML = '⏳ Submitting Data to Teacher...';
   }
 
   // Calculate scores and bundle payload
@@ -1131,26 +1131,26 @@ async function submitStudentWorksheetOnline() {
   try {
     if (typeof FirebaseService !== 'undefined' && FirebaseService.isReady()) {
       await FirebaseService.submitStudentWorksheet(payload);
-      showStudentToast('🎉 Lembar jawaban Anda berhasil dikirimkan ke Guru!', 'success');
+      showStudentToast('🎉 Your worksheet has been successfully submitted to your Teacher!', 'success');
       if (submitBtn) {
-        submitBtn.innerHTML = '✅ Terkirim ke Guru!';
+        submitBtn.innerHTML = '✅ Submitted to Teacher!';
         submitBtn.style.background = '#10b981';
       }
     } else {
       // Offline fallback: save locally and inform student
       console.log("Offline local record submission:", payload);
-      showStudentToast('⚠️ Kunci Firebase belum diisi di firebase-config.js. Jawaban disimpan lokal.', 'warning');
+      showStudentToast('⚠️ Firebase is not configured in firebase-config.js. Answers saved locally.', 'warning');
       if (submitBtn) {
         submitBtn.disabled = false;
-        submitBtn.innerHTML = '🚀 Kirim Lembar Jawaban ke Guru (Online)';
+        submitBtn.innerHTML = '🚀 Submit Worksheet to Teacher (Online)';
       }
     }
   } catch (err) {
     console.error("Submission error:", err);
-    showStudentToast('Gagal mengirim jawaban: ' + (err.message || 'Terjadi kesalahan jaringan.'), 'error');
+    showStudentToast('Failed to submit worksheet: ' + (err.message || 'Network error occurred.'), 'error');
     if (submitBtn) {
       submitBtn.disabled = false;
-      submitBtn.innerHTML = '🚀 Coba Kirim Ulang';
+      submitBtn.innerHTML = '🚀 Retry Submission';
     }
   }
 }
@@ -1170,7 +1170,7 @@ function confirmStudentReset() {
   StudentState.answers = {};
   localStorage.removeItem(STUDENT_STORAGE_KEY);
   closeStudentModal('student-reset-modal');
-  showStudentToast('Lembar kerja siswa berhasil direset.', 'info');
+  showStudentToast('Student worksheet has been successfully reset.', 'info');
   setStudentView('dashboard');
 }
 

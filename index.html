@@ -24,15 +24,15 @@
       <div class="nav-brand" onclick="setView('dashboard')">
         <img src="logo.png" alt="SMA Plus PGRI Cibinong" class="nav-brand-logo">
         <div class="nav-brand-text">
-          <span class="brand-badge">MPI TKA 2025</span>
-          <span class="brand-title">English Wajib</span>
+          <span class="brand-badge">TEACHER MODE</span>
+          <span class="brand-title">MPI English 2025</span>
         </div>
       </div>
 
       <nav>
         <ul class="nav-links">
           <li class="nav-item active" data-view="dashboard" onclick="setView('dashboard')">📊 Dashboard</li>
-          <li class="nav-item" data-view="live_submissions" onclick="setView('live_submissions')">📡 Live Rekap Siswa <span id="badge-submission-count" class="badge badge-green" style="display:none; font-size: 0.72rem; padding: 2px 6px; margin-left: 4px;">0</span></li>
+          <li class="nav-item" data-view="live_submissions" onclick="setView('live_submissions')">📡 Live Submissions <span id="badge-submission-count" class="badge badge-green" style="display:none; font-size: 0.72rem; padding: 2px 6px; margin-left: 4px;">0</span></li>
           <li class="nav-item" data-view="vocab_lab" onclick="setView('vocab_lab')">📚 Vocabulary Lab</li>
           <li class="nav-item" data-view="tka_strategy" onclick="setView('tka_strategy')">🎯 TKA Strategy</li>
           <li class="nav-item" data-view="final_review" onclick="setView('final_review')">🎓 Final Report</li>
@@ -41,7 +41,7 @@
 
       <div class="nav-actions">
         <!-- Lock Dashboard -->
-        <button class="btn btn-secondary btn-sm" onclick="lockTeacherDashboard()" title="Kunci Dashboard Guru">🔒 Kunci</button>
+        <button class="btn btn-secondary btn-sm" onclick="lockTeacherDashboard()" title="Lock Teacher Dashboard">🔒 Lock</button>
         <!-- Dark/Light Mode Switcher -->
         <button class="btn-theme-toggle" id="btn-theme-toggle" onclick="toggleTheme()">
           <span id="theme-icon">🌙</span> <span id="theme-label">Dark Mode</span>
@@ -63,23 +63,23 @@
               <img src="logo.png" alt="SMA Plus PGRI Cibinong" class="hero-school-logo">
               <div class="hero-school-name">SMA PLUS PGRI CIBINONG</div>
             </div>
-            <span class="hero-subtitle-tag">MEDIA PEMBELAJARAN INTERAKTIF</span>
-            <h1 class="hero-title">TKA BAHASA INGGRIS SMA 2025</h1>
-            <h2 class="hero-subtitle">Bank Soal, Kunci Jawaban Lengkap, Bukti Tekstual & Analisis Pengecoh</h2>
-            <p class="hero-scope">Texts 1–4 | Questions 1–20 • Sesuai Modul Resmi</p>
+            <span class="hero-subtitle-tag">INTERACTIVE LEARNING PLATFORM</span>
+            <h1 class="hero-title">SMA ENGLISH TKA 2025 (CORE)</h1>
+            <h2 class="hero-subtitle">Question Bank, Official Answer Keys, Textual Evidence & Distractor Analysis</h2>
+            <p class="hero-scope">Texts 1–4 | Questions 1–20 • Official Assessment Aligned</p>
 
             <div class="hero-features-grid">
               <div class="hero-feature-item">
                 <h4>🧠 Mindful Learning</h4>
-                <p>Pahami proses berpikir, kenali tipe soal TKA, dan pelajari analisis mendalam alasan setiap opsi salah.</p>
+                <p>Understand higher-order reading cognition, recognize TKA question types, and analyze distractor rationales.</p>
               </div>
               <div class="hero-feature-item">
                 <h4>🔍 Meaningful Learning</h4>
-                <p>Hubungkan setiap jawaban dengan bukti tekstual autentik dari paragraf bacaan secara langsung.</p>
+                <p>Directly connect every answer option with verified textual evidence from reading paragraphs.</p>
               </div>
               <div class="hero-feature-item">
                 <h4>✨ Joyful Learning</h4>
-                <p>Belajar interaktif dengan Audio Pronunciation TTS, 3D Flip Cards, Matching Game, dan Instant Feedback.</p>
+                <p>Learn interactively with text-to-speech pronunciation, 3D flip cards, matching game, and instant feedback.</p>
               </div>
             </div>
 
@@ -98,8 +98,8 @@
         <!-- Welcome Hero Banner -->
         <div class="dashboard-hero-banner">
           <div>
-            <div class="dash-banner-title">Bank Soal & Pembahasan TKA Bahasa Inggris SMA 2025</div>
-            <p class="dash-banner-subtitle">Identifikasi Jenis Teks, Naskah Soal Asli (1–20), Kunci Jawaban Lengkap, Bukti Tekstual & Analisis Pengecoh.</p>
+            <div class="dash-banner-title">Question Bank & Official Explanations — SMA English TKA 2025</div>
+            <p class="dash-banner-subtitle">Text Genres Identification, Original Questions (1–20), Official Keys, Textual Evidence & Distractor Rationales.</p>
           </div>
           <div>
             <button class="btn btn-primary btn-lg" style="background: white; color: #1e3a8a;" onclick="openTextWorkspace(1)">
@@ -293,7 +293,7 @@
           <div style="background: var(--bg-card); padding: 24px 30px; border-radius: 14px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
             <div>
               <h2 style="font-size: 1.6rem; font-weight: 900; color: var(--text-main); margin-bottom: 4px;">📚 Vocabulary Lab</h2>
-              <p style="font-size: 0.95rem; color: var(--text-muted);">Eksplorasi kosakata pilihan dari Text 1 hingga Text 4 lengkap dengan audio pengucapan & latihan interaktif.</p>
+              <p style="font-size: 0.95rem; color: var(--text-muted);">Explore essential vocabulary from Text 1 through Text 4 with audio pronunciation & interactive practice.</p>
             </div>
             <button class="btn btn-secondary btn-sm" onclick="setView('dashboard')">← Back to Dashboard</button>
           </div>
@@ -328,7 +328,7 @@
           <div style="background: var(--bg-card); padding: 24px 30px; border-radius: 14px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
             <div>
               <h2 style="font-size: 1.6rem; font-weight: 900; color: var(--text-main); margin-bottom: 4px;">🎯 TKA Strategy & Question Formulas</h2>
-              <p style="font-size: 0.95rem; color: var(--text-muted);">Panduan metode dan formula berpikir sistematis untuk 12 jenis soal TKA Bahasa Inggris SMA.</p>
+              <p style="font-size: 0.95rem; color: var(--text-muted);">Systematic reading methods and reasoning formulas for 12 SMA English TKA question types.</p>
             </div>
             <button class="btn btn-secondary btn-sm" onclick="setView('dashboard')">← Back to Dashboard</button>
           </div>
@@ -356,16 +356,16 @@
             <div>
               <div class="dev-badge-row">
                 <span class="badge badge-green">📡 Realtime Cloud Sync</span>
-                <span class="badge badge-blue">Mode Guru / Pembimbing</span>
+                <span class="badge badge-blue">Teacher / Instructor Mode</span>
               </div>
-              <h2 style="font-size: 1.85rem; font-weight: 900; color: var(--text-main); margin-bottom: 6px;">Live Rekap Lembar Jawaban Siswa</h2>
+              <h2 style="font-size: 1.85rem; font-weight: 900; color: var(--text-main); margin-bottom: 6px;">Live Student Submissions & Analytics</h2>
               <p style="font-size: 0.95rem; color: var(--text-muted);">
-                Pantau pengumpulan jawaban siswa, nilai otomatis, dan analisis justifikasi alasan HOTS secara langsung.
+                Monitor student submissions, automated scoring, and HOTS analytical justifications in real time.
               </p>
             </div>
             <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-              <button class="btn btn-primary btn-sm" onclick="exportSubmissionsToCSV()">📥 Unduh Rekap (Excel/CSV)</button>
-              <button class="btn btn-outline btn-sm" onclick="refreshSubmissionsManually()">🔄 Segarkan Data</button>
+              <button class="btn btn-primary btn-sm" onclick="exportSubmissionsToCSV()">📥 Export Report (Excel/CSV)</button>
+              <button class="btn btn-outline btn-sm" onclick="refreshSubmissionsManually()">🔄 Refresh Data</button>
             </div>
           </div>
 
@@ -375,28 +375,28 @@
               <div class="stat-icon" style="background: var(--accent-green-light); color: var(--accent-green);">👥</div>
               <div>
                 <div class="stat-val" id="live-stat-total">0</div>
-                <div class="stat-label">Total Siswa Masuk</div>
+                <div class="stat-label">Total Submissions</div>
               </div>
             </div>
             <div class="stat-card">
               <div class="stat-icon" style="background: var(--accent-cyan-light); color: var(--academic-blue);">📊</div>
               <div>
                 <div class="stat-val" id="live-stat-avg">0%</div>
-                <div class="stat-label">Rata-rata Akurasi</div>
+                <div class="stat-label">Average Accuracy</div>
               </div>
             </div>
             <div class="stat-card">
               <div class="stat-icon" style="background: var(--accent-amber-light); color: var(--accent-amber);">🏆</div>
               <div>
                 <div class="stat-val" id="live-stat-highest">0/20</div>
-                <div class="stat-label">Skor Tertinggi</div>
+                <div class="stat-label">Highest Score</div>
               </div>
             </div>
             <div class="stat-card">
               <div class="stat-icon" style="background: #ede9fe; color: #7c3aed;">✍️</div>
               <div>
                 <div class="stat-val" id="live-stat-reasons">0%</div>
-                <div class="stat-label">Kelengkapan Alasan</div>
+                <div class="stat-label">Reasoning Rate</div>
               </div>
             </div>
           </div>
@@ -405,17 +405,17 @@
           <div class="live-sub-filter-bar">
             <div style="display: flex; gap: 12px; align-items: center; flex: 1; min-width: 250px;">
               <span style="font-size: 1.1rem;">🔍</span>
-              <input type="text" id="live-search-input" class="student-input-field" placeholder="Cari nama siswa..." oninput="filterLiveSubmissionsTable()" style="width: 100%;">
+              <input type="text" id="live-search-input" class="student-input-field" placeholder="Search student name..." oninput="filterLiveSubmissionsTable()" style="width: 100%;">
             </div>
             <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
               <select id="live-class-filter" class="student-input-field" onchange="filterLiveSubmissionsTable()">
-                <option value="all">Semua Kelas</option>
+                <option value="all">All Classes</option>
               </select>
               <select id="live-sort-filter" class="student-input-field" onchange="filterLiveSubmissionsTable()">
-                <option value="time_desc">Waktu Terbaru</option>
-                <option value="score_desc">Nilai Tertinggi</option>
-                <option value="score_asc">Nilai Terendah</option>
-                <option value="name_asc">Nama (A-Z)</option>
+                <option value="time_desc">Newest First</option>
+                <option value="score_desc">Highest Score</option>
+                <option value="score_asc">Lowest Score</option>
+                <option value="name_asc">Name (A-Z)</option>
               </select>
             </div>
           </div>
@@ -439,10 +439,10 @@
         <div style="width: 72px; height: 72px; margin: 0 auto 16px; background: linear-gradient(135deg, #1e40af, #0284c7); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; box-shadow: 0 4px 14px rgba(30, 64, 175, 0.4);">
           🔐
         </div>
-        <span class="badge badge-blue" style="margin-bottom: 8px;">Akses Khusus Guru & Pembimbing</span>
-        <h3 style="font-size: 1.45rem; font-weight: 900; color: var(--text-main); margin-bottom: 8px;">Masukkan PIN Guru</h3>
+        <span class="badge badge-blue" style="margin-bottom: 8px;">Teacher & Instructor Access</span>
+        <h3 style="font-size: 1.45rem; font-weight: 900; color: var(--text-main); margin-bottom: 8px;">Enter Teacher PIN</h3>
         <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; line-height: 1.5;">
-          Halaman ini memuat kunci jawaban resmi, pembahasan, dan live rekap nilai siswa.
+          This dashboard contains official answer keys, passages, and real-time student submissions.
         </p>
 
         <form id="teacher-pin-form" onsubmit="verifyTeacherPIN(event)" style="display: flex; flex-direction: column; gap: 16px;">
@@ -451,14 +451,14 @@
                    style="width: 190px; text-align: center; font-size: 2.2rem; letter-spacing: 0.4em; padding: 10px 14px; border-radius: 12px; border: 2px solid var(--border-color); background: var(--bg-card-alt); color: var(--text-main); font-weight: 800; font-family: monospace;">
           </div>
           <div id="pin-error-msg" style="color: #ef4444; font-size: 0.88rem; font-weight: 700; display: none;">
-            ❌ PIN salah! Silakan coba lagi.
+            ❌ Incorrect PIN! Please try again.
           </div>
           <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; font-size: 1.05rem;">
-            🔓 Buka Dashboard Guru
+            🔓 Unlock Teacher Dashboard
           </button>
         </form>
         <div style="margin-top: 22px; font-size: 0.84rem; color: var(--text-muted);">
-          Bukan Guru? <a href="student.html" style="color: var(--academic-blue); font-weight: 700; text-decoration: underline;">Buka Lembar Kerja Siswa →</a>
+          Not a teacher? <a href="student.html" style="color: var(--academic-blue); font-weight: 700; text-decoration: underline;">Open Student Worksheet →</a>
         </div>
       </div>
     </div>
@@ -482,7 +482,7 @@
       <div class="modal-content" style="max-width: 850px; max-height: 90vh; overflow-y: auto;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid var(--border-color); padding-bottom: 14px;">
           <div>
-            <span class="badge badge-blue">Rincian Lembar Jawaban Siswa</span>
+            <span class="badge badge-blue">Student Submission Details</span>
             <h3 id="sub-modal-student-name" style="font-size: 1.4rem; font-weight: 900; color: var(--text-main); margin-top: 4px;"></h3>
           </div>
           <button style="background: none; border: none; font-size: 1.6rem; cursor: pointer; color: var(--text-muted);" onclick="closeModal('submission-detail-modal')">✕</button>

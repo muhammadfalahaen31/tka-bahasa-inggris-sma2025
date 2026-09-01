@@ -76,7 +76,7 @@ function verifyTeacherPIN(e) {
     sessionStorage.setItem(PIN_AUTH_KEY, "true");
     const pinModal = document.getElementById("teacher-pin-modal");
     if (pinModal) pinModal.classList.remove("active");
-    showToast("✅ Berhasil masuk! Selamat datang, Pak Falahaen.", "success");
+    showToast("✅ Successfully logged in! Welcome, Teacher.", "success");
     if (errorMsg) errorMsg.style.display = "none";
   } else {
     if (errorMsg) errorMsg.style.display = "block";
@@ -88,7 +88,7 @@ function verifyTeacherPIN(e) {
 function lockTeacherDashboard() {
   sessionStorage.removeItem(PIN_AUTH_KEY);
   checkTeacherAuth();
-  showToast("Layar Dashboard Guru telah dikunci.", "info");
+  showToast("Teacher Dashboard screen has been locked.", "info");
 }
 
 function loadTheme() {
@@ -1663,7 +1663,7 @@ function renderLiveSubmissions() {
   const classFilterSelect = document.getElementById('live-class-filter');
   if (classFilterSelect) {
     const currentVal = classFilterSelect.value;
-    let optHtml = '<option value="all">Semua Kelas</option>';
+    let optHtml = '<option value="all">All Classes</option>';
     Array.from(classesSet).sort().forEach(cls => {
       optHtml += `<option value="${escapeHtml(cls)}" ${cls === currentVal ? 'selected' : ''}>${escapeHtml(cls)}</option>`;
     });
@@ -1715,12 +1715,12 @@ function filterLiveSubmissionsTable() {
       <div style="padding: 48px 24px; text-align: center; color: var(--text-muted);">
         <div style="font-size: 3rem; margin-bottom: 12px;">📡</div>
         <h4 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 8px;">
-          ${isConfigured ? 'Belum Ada Lembar Jawaban Siswa Masuk' : 'Firebase Database Belum Dikonfigurasi'}
+          ${isConfigured ? 'No Student Submissions Yet' : 'Firebase Database Not Configured'}
         </h4>
         <p style="font-size: 0.92rem; max-width: 540px; margin: 0 auto; line-height: 1.6;">
           ${isConfigured 
-            ? 'Ketika siswa menyelesaikan pengerjaan di Lembar Kerja Siswa (student.html) dan menekan tombol Kirim, datanya akan langsung otomatis muncul di sini secara realtime.' 
-            : 'Silakan hubungkan API Key Firebase Anda pada file <code>firebase-config.js</code> untuk mengaktifkan sinkronisasi realtime cloud gratis dari Google.'}
+            ? 'When students complete their worksheet on the student page (student.html) and click Submit, their responses and scores will appear here in real time.' 
+            : 'Please configure your Firebase credentials in <code>firebase-config.js</code> to enable realtime cloud synchronization.'}
         </p>
       </div>
     `;
@@ -1732,13 +1732,13 @@ function filterLiveSubmissionsTable() {
       <thead>
         <tr>
           <th>No</th>
-          <th>Nama Siswa</th>
-          <th>Kelas</th>
-          <th>Skor Akhir</th>
-          <th>Akurasi</th>
-          <th>Alasan HOTS</th>
-          <th>Waktu Kirim</th>
-          <th style="text-align: center;">Aksi</th>
+          <th>Student Name</th>
+          <th>Grade / Class</th>
+          <th>Final Score</th>
+          <th>Accuracy</th>
+          <th>HOTS Reasoning</th>
+          <th>Submitted At</th>
+          <th style="text-align: center;">Action</th>
         </tr>
       </thead>
       <tbody>
@@ -1757,7 +1757,7 @@ function filterLiveSubmissionsTable() {
     let timeFormatted = '-';
     if (sub.clientTimestamp) {
       const d = new Date(sub.clientTimestamp);
-      timeFormatted = d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' • ' + d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+      timeFormatted = d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) + ' • ' + d.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
     }
 
     tableHtml += `
@@ -1767,11 +1767,11 @@ function filterLiveSubmissionsTable() {
         <td><span class="badge badge-cyan">${escapeHtml(sub.studentClass || '-')}</span></td>
         <td>${scoreBadge}</td>
         <td><strong>${accuracy}%</strong></td>
-        <td><span class="badge badge-purple">${reasoned}/20 Terisi</span></td>
+        <td><span class="badge badge-purple">${reasoned}/20 Completed</span></td>
         <td style="font-size: 0.85rem; color: var(--text-muted);">${timeFormatted}</td>
         <td style="text-align: center;">
           <button class="btn btn-primary btn-sm" onclick="openStudentSubmissionDetail('${sub.id}')" style="padding: 5px 10px; font-size: 0.82rem;">
-            🔍 Lihat Rincian
+            🔍 View Details
           </button>
         </td>
       </tr>
@@ -1790,7 +1790,7 @@ function openStudentSubmissionDetail(submissionId) {
   const modalBody = document.getElementById('sub-modal-content-body');
   if (!modalTitle || !modalBody) return;
 
-  modalTitle.textContent = `${sub.studentName || 'Siswa'} (${sub.studentClass || '-'})`;
+  modalTitle.textContent = `${sub.studentName || 'Student'} (${sub.studentClass || '-'})`;
 
   const computed = computeSubmissionScore(sub);
   const score = computed.score;
@@ -1801,20 +1801,20 @@ function openStudentSubmissionDetail(submissionId) {
     <!-- Top Meta Stats -->
     <div style="background: var(--bg-card-alt); border-radius: 12px; padding: 18px 22px; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 24px; border: 1px solid var(--border-color);">
       <div>
-        <div style="font-size: 0.78rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Total Skor:</div>
+        <div style="font-size: 0.78rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Total Score:</div>
         <div style="font-size: 1.4rem; font-weight: 900; color: var(--academic-blue);">${score}/20 (${accuracy}%)</div>
       </div>
       <div>
-        <div style="font-size: 0.78rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Kelengkapan Alasan:</div>
-        <div style="font-size: 1.2rem; font-weight: 800; color: var(--accent-green);">${reasoned}/20 Soal</div>
+        <div style="font-size: 0.78rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Reasoning Rate:</div>
+        <div style="font-size: 1.2rem; font-weight: 800; color: var(--accent-green);">${reasoned}/20 Questions</div>
       </div>
       <div>
-        <div style="font-size: 0.78rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Waktu Pengiriman:</div>
-        <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-top: 4px;">${sub.clientTimestamp ? new Date(sub.clientTimestamp).toLocaleString('id-ID') : '-'}</div>
+        <div style="font-size: 0.78rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Submitted At:</div>
+        <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-top: 4px;">${sub.clientTimestamp ? new Date(sub.clientTimestamp).toLocaleString('en-US') : '-'}</div>
       </div>
     </div>
 
-    <h4 style="font-size: 1.15rem; font-weight: 800; color: var(--text-main); margin-bottom: 14px;">📋 Pemeriksaan Jawaban & Bukti Teks Siswa:</h4>
+    <h4 style="font-size: 1.15rem; font-weight: 800; color: var(--text-main); margin-bottom: 14px;">📋 Student Answers & Evidence Verification:</h4>
     <div style="display: flex; flex-direction: column; gap: 16px;">
   `;
 
@@ -1842,13 +1842,13 @@ function openStudentSubmissionDetail(submissionId) {
 
     const hasReason = qRecord.reason && qRecord.reason.trim().length > 0;
 
-    let ansDisplay = '<em>(Tidak Dijawab)</em>';
+    let ansDisplay = '<em>(Unanswered)</em>';
     if (qRecord.answer !== null && qRecord.answer !== undefined) {
       if (q.format === 'multiple_choice') {
         const opt = q.options.find(o => String(o.key).trim() === String(qRecord.answer).trim());
-        ansDisplay = `<strong>Opsi (${qRecord.answer}):</strong> ${opt ? escapeHtml(opt.text) : ''}`;
+        ansDisplay = `<strong>Selected (${qRecord.answer}):</strong> ${opt ? escapeHtml(opt.text) : ''}`;
       } else if (q.format === 'multi_select') {
-        ansDisplay = `<strong>Pilihan:</strong> [${Array.isArray(qRecord.answer) ? qRecord.answer.join(', ') : qRecord.answer}]`;
+        ansDisplay = `<strong>Selected:</strong> [${Array.isArray(qRecord.answer) ? qRecord.answer.join(', ') : qRecord.answer}]`;
       } else if (q.format === 'categorization') {
         ansDisplay = Object.keys(qRecord.answer).map(k => `${k}: ${qRecord.answer[k]}`).join(' | ');
       }
@@ -1857,20 +1857,20 @@ function openStudentSubmissionDetail(submissionId) {
     bodyHtml += `
       <div style="background: var(--bg-card-alt); border-radius: 10px; border: 1.5px solid ${isCorrect ? '#86efac' : '#fca5a5'}; padding: 18px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-          <span class="badge badge-blue">Soal #${q.number} (${q.type})</span>
-          <span class="badge ${isCorrect ? 'badge-green' : 'badge-amber'}">${isCorrect ? '✓ Benar' : '✗ Salah'}</span>
+          <span class="badge badge-blue">Question #${q.number} (${q.type})</span>
+          <span class="badge ${isCorrect ? 'badge-green' : 'badge-amber'}">${isCorrect ? '✓ Correct' : '✗ Incorrect'}</span>
         </div>
         <div style="font-weight: 700; font-size: 0.98rem; color: var(--text-main); margin-bottom: 10px;">${escapeHtml(q.question)}</div>
         
         <div style="background: var(--bg-card); padding: 10px 14px; border-radius: 6px; border: 1px solid var(--border-color); font-size: 0.92rem; margin-bottom: 10px;">
-          <span style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 800;">Jawaban Siswa:</span><br>
+          <span style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 800;">Student Answer:</span><br>
           ${ansDisplay}
         </div>
 
         <div style="background: ${hasReason ? 'var(--accent-cyan-light)' : '#f1f5f9'}; border-left: 3px solid var(--academic-blue); padding: 10px 14px; border-radius: 6px; font-size: 0.9rem;">
-          <strong style="color: var(--academic-blue); font-size: 0.82rem;">✍️ Alasan & Bukti Teks dari Siswa:</strong>
+          <strong style="color: var(--academic-blue); font-size: 0.82rem;">✍️ Student Reasoning & Textual Evidence:</strong>
           <p style="margin-top: 3px; color: var(--text-main); font-style: ${hasReason ? 'normal' : 'italic'};">
-            ${hasReason ? escapeHtml(qRecord.reason) : 'Siswa tidak mencantumkan alasan.'}
+            ${hasReason ? escapeHtml(qRecord.reason) : 'Student did not provide reasoning for this question.'}
           </p>
         </div>
       </div>
@@ -1884,28 +1884,28 @@ function openStudentSubmissionDetail(submissionId) {
 
 function exportSubmissionsToCSV() {
   if (!AppState.submissions || AppState.submissions.length === 0) {
-    showToast('Belum ada data nilai siswa untuk diunduh.', 'warning');
+    showToast('No student submission records available to export.', 'warning');
     return;
   }
 
   let csvContent = "data:text/csv;charset=utf-8,";
-  csvContent += "No,Nama Siswa,Kelas,Skor (dari 20),Persentase Akurasi,Jumlah Alasan HOTS,Waktu Submit\n";
+  csvContent += "No,Student Name,Grade / Class,Score (out of 20),Accuracy Percentage,HOTS Reasoning Count,Submitted At\n";
 
   AppState.submissions.forEach((s, idx) => {
     const computed = computeSubmissionScore(s);
     const accuracy = Math.round((computed.score / 20) * 100);
-    const dateStr = s.clientTimestamp ? new Date(s.clientTimestamp).toLocaleString('id-ID') : '-';
+    const dateStr = s.clientTimestamp ? new Date(s.clientTimestamp).toLocaleString('en-US') : '-';
     csvContent += `"${idx + 1}","${(s.studentName || '').replace(/"/g, '""')}","${(s.studentClass || '').replace(/"/g, '""')}","${computed.score}","${accuracy}%","${computed.reasonedCount}","${dateStr}"\n`;
   });
 
   const encodedUri = encodeURI(csvContent);
   const link = document.createElement("a");
   link.setAttribute("href", encodedUri);
-  link.setAttribute("download", `Rekap_Nilai_TKA_2025_${new Date().toISOString().slice(0,10)}.csv`);
+  link.setAttribute("download", `SMA_English_TKA_Submissions_${new Date().toISOString().slice(0,10)}.csv`);
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
-  showToast('File Rekap Nilai CSV berhasil diunduh.', 'success');
+  showToast('Submission CSV report downloaded successfully.', 'success');
 }
 
 function openModal(id) {

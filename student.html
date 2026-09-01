@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>MPI TKA ENGLISH WAJIB 2025 — Student Worksheet & Reasoning Mode (20 Soal)</title>
-  <meta name="description" content="Lembar Kerja Siswa Interaktif (Student Worksheet & Reasoning) TKA Bahasa Inggris SMA 2025 - 20 Soal dengan Kolom Justifikasi Alasan dan Bukti Teks.">
+  <title>MPI TKA ENGLISH CORE 2025 — Student Worksheet & Reasoning Hub (20 Questions)</title>
+  <meta name="description" content="Interactive Student Worksheet & Reasoning Hub for SMA English TKA 2025 - 20 Questions with Analytical Justification & Textual Evidence.">
   
   <!-- Google Fonts: Inter & Merriweather -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -364,8 +364,8 @@
       <div class="nav-brand" onclick="setStudentView('dashboard')">
         <img src="logo.png" alt="SMA Plus PGRI Cibinong" class="nav-brand-logo">
         <div class="nav-brand-text">
-          <span class="student-badge">MODE SISWA</span>
-          <span class="brand-title">MPI English Wajib 2025</span>
+          <span class="student-badge">STUDENT MODE</span>
+          <span class="brand-title">MPI English 2025</span>
         </div>
       </div>
 
@@ -374,7 +374,7 @@
           <li class="nav-item active" data-view="dashboard" onclick="setStudentView('dashboard')">📊 Dashboard</li>
           <li class="nav-item" data-view="vocab_lab" onclick="setStudentView('vocab_lab')">📚 Vocabulary Lab</li>
           <li class="nav-item" data-view="tka_strategy" onclick="setStudentView('tka_strategy')">🎯 TKA Strategy</li>
-          <li class="nav-item" data-view="worksheet_summary" onclick="setStudentView('worksheet_summary')">📋 Lembar Jawaban Saya</li>
+          <li class="nav-item" data-view="worksheet_summary" onclick="setStudentView('worksheet_summary')">📋 My Worksheet</li>
         </ul>
       </nav>
 
@@ -398,15 +398,15 @@
         <!-- Student Identity Form -->
         <div class="student-id-card">
           <div class="student-input-group">
-            <label class="student-input-label">Nama Siswa / Student Name:</label>
-            <input type="text" id="input-student-name" class="student-input-field" placeholder="Ketik nama lengkap Anda..." onchange="saveStudentProfile()">
+            <label class="student-input-label">Student Full Name:</label>
+            <input type="text" id="input-student-name" class="student-input-field" placeholder="Enter your full name..." onchange="saveStudentProfile()">
           </div>
           <div class="student-input-group">
-            <label class="student-input-label">Kelas / Grade:</label>
-            <input type="text" id="input-student-class" class="student-input-field" placeholder="Contoh: XII-A / XII-B..." onchange="saveStudentProfile()">
+            <label class="student-input-label">Grade / Class:</label>
+            <input type="text" id="input-student-class" class="student-input-field" placeholder="e.g., XII-A / XII-B..." onchange="saveStudentProfile()">
           </div>
           <div class="student-input-group">
-            <label class="student-input-label">Sekolah / Institution:</label>
+            <label class="student-input-label">School / Institution:</label>
             <input type="text" id="input-student-school" class="student-input-field" value="SMA Plus PGRI Cibinong" readonly>
           </div>
         </div>
@@ -414,14 +414,14 @@
         <!-- Student Hero Banner -->
         <div class="dashboard-hero-banner" style="background: linear-gradient(135deg, #065f46, #0f172a);">
           <div>
-            <div class="dash-banner-title">🎓 Student Worksheet & Reasoning Hub (20 Soal)</div>
+            <div class="dash-banner-title">🎓 Student Worksheet & Reasoning Hub (20 Questions)</div>
             <p class="dash-banner-subtitle">
-              Pilih teks bacaan dan jawab soal TKA Bahasa Inggris SMA 2025. <strong>Tuliskan alasan & bukti teks</strong> di setiap nomor untuk melatih penalaran kritis (HOTS).
+              Select a reading passage and answer the 2025 SMA English TKA questions. <strong>Provide textual evidence & reasoning</strong> for each question to practice Higher-Order Thinking Skills (HOTS).
             </p>
           </div>
           <div>
             <button class="btn btn-primary btn-lg" style="background: white; color: #065f46;" onclick="openStudentWorkspace(1)">
-              📖 Mulai Text 1 →
+              📖 Start Text 1 →
             </button>
           </div>
         </div>
@@ -433,10 +433,10 @@
               <div class="hub-icon-box" style="background: #dcfce7; color: #059669;">📚</div>
               <div>
                 <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 4px;">Vocabulary Lab</h3>
-                <p style="font-size: 0.9rem; color: var(--text-muted);">Kosakata esensial, Audio Pengucapan, Flip Cards & Matching Game.</p>
+                <p style="font-size: 0.9rem; color: var(--text-muted);">Essential vocabulary, audio pronunciations, interactive flip cards & matching game.</p>
               </div>
             </div>
-            <span class="btn btn-outline btn-sm">Buka Lab →</span>
+            <span class="btn btn-outline btn-sm">Open Lab →</span>
           </div>
 
           <div class="dash-hub-card" onclick="setStudentView('tka_strategy')">
@@ -444,10 +444,10 @@
               <div class="hub-icon-box" style="background: var(--accent-amber-light); color: var(--accent-amber);">🎯</div>
               <div>
                 <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 4px;">TKA Strategy Guide</h3>
-                <p style="font-size: 0.9rem; color: var(--text-muted);">12 Formula & metode sistematis menjawab soal TKA 2025.</p>
+                <p style="font-size: 0.9rem; color: var(--text-muted);">12 Systematic formulas & reading strategies for solving TKA questions.</p>
               </div>
             </div>
-            <span class="btn btn-outline btn-sm">Buka Strategi →</span>
+            <span class="btn btn-outline btn-sm">Open Guide →</span>
           </div>
         </div>
 
@@ -457,21 +457,21 @@
             <div class="stat-icon" style="background: #dcfce7; color: #059669;">📝</div>
             <div>
               <div class="stat-val" id="student-stat-answered">0/20</div>
-              <div class="stat-label">Soal Terjawab</div>
+              <div class="stat-label">Questions Answered</div>
             </div>
           </div>
           <div class="stat-card">
             <div class="stat-icon" style="background: var(--accent-cyan-light); color: var(--academic-blue);">✍️</div>
             <div>
               <div class="stat-val" id="student-stat-reasoned">0/20</div>
-              <div class="stat-label">Alasan Disertakan</div>
+              <div class="stat-label">Reasoning Provided</div>
             </div>
           </div>
           <div class="stat-card">
             <div class="stat-icon">📖</div>
             <div>
               <div class="stat-val">4 Texts</div>
-              <div class="stat-label">Materi Teks TKA</div>
+              <div class="stat-label">Reading Modules</div>
             </div>
           </div>
           <div class="stat-card">
@@ -480,7 +480,7 @@
             </div>
             <div>
               <div class="stat-val" style="font-size: 1.1rem; font-weight: 800;">M. Falahaen J., M.Pd.</div>
-              <div class="stat-label">Guru Pembimbing</div>
+              <div class="stat-label">Advisor Teacher</div>
             </div>
           </div>
         </div>
@@ -503,7 +503,7 @@
 
           <div style="display: flex; align-items: center; gap: 10px;">
             <div class="font-size-control-group">
-              <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-right: 4px;">Ukuran Teks:</span>
+              <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-right: 4px;">Text Size:</span>
               <button class="btn-font-ctrl" onclick="changeStudentFontSize(-1)">A-</button>
               <button class="btn-font-ctrl" onclick="changeStudentFontSize(0)">Default</button>
               <button class="btn-font-ctrl" onclick="changeStudentFontSize(1)">A+</button>
@@ -514,8 +514,8 @@
 
         <!-- Mobile View Toggle (HP / Tablet) -->
         <div class="mobile-tab-switch">
-          <button class="mobile-switch-btn active" id="btn-mobile-read" onclick="setMobileViewTab('read')">📖 1. Baca Teks</button>
-          <button class="mobile-switch-btn" id="btn-mobile-quiz" onclick="setMobileViewTab('quiz')">✏️ 2. Soal & Alasan</button>
+          <button class="mobile-switch-btn active" id="btn-mobile-read" onclick="setMobileViewTab('read')">📖 1. Read Passage</button>
+          <button class="mobile-switch-btn" id="btn-mobile-quiz" onclick="setMobileViewTab('quiz')">✏️ 2. Question & Reasoning</button>
         </div>
 
         <!-- Split Grid Workspace -->
@@ -530,7 +530,7 @@
             </div>
             <div class="mobile-read-action-bar">
               <button class="btn btn-primary btn-lg" onclick="setMobileViewTab('quiz')" style="width: 100%; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);">
-                ✏️ Lanjut Jawab Soal & Tulis Alasan →
+                ✏️ Proceed to Question & Reasoning →
               </button>
             </div>
           </div>
@@ -539,7 +539,7 @@
           <div class="workspace-right-panel" id="student-practice-panel">
             
             <div class="practice-header-bar">
-              <span style="font-weight: 800; color: var(--text-main); font-size: 1.05rem;">Butir Soal:</span>
+              <span style="font-weight: 800; color: var(--text-main); font-size: 1.05rem;">Questions Navigator:</span>
               <div class="practice-q-nav" id="student-practice-q-nav">
                 <!-- Pills -->
               </div>
@@ -561,14 +561,14 @@
           <div style="background: var(--bg-card); padding: 24px 30px; border-radius: 14px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
             <div>
               <h2 style="font-size: 1.6rem; font-weight: 900; color: var(--text-main); margin-bottom: 4px;">📚 Vocabulary Lab</h2>
-              <p style="font-size: 0.95rem; color: var(--text-muted);">Pelajari kosakata sulit dengan audio pengucapan, kartu flip, dan kuis konteks.</p>
+              <p style="font-size: 0.95rem; color: var(--text-muted);">Master essential vocabulary with audio pronunciation, interactive flip cards, and context challenge.</p>
             </div>
-            <button class="btn btn-secondary btn-sm" onclick="setStudentView('dashboard')">← Kembali ke Dashboard</button>
+            <button class="btn btn-secondary btn-sm" onclick="setStudentView('dashboard')">← Back to Dashboard</button>
           </div>
 
           <!-- Text Filter -->
           <div class="vocab-filter-pills">
-            <button class="vocab-filter-pill active" data-textfilter="all" onclick="filterStudentVocab('all')">Semua Teks (34 Kata)</button>
+            <button class="vocab-filter-pill active" data-textfilter="all" onclick="filterStudentVocab('all')">All Texts (34 Words)</button>
             <button class="vocab-filter-pill" data-textfilter="1" onclick="filterStudentVocab(1)">Text 1: The Lion & Mouse (10)</button>
             <button class="vocab-filter-pill" data-textfilter="2" onclick="filterStudentVocab(2)">Text 2: Study Techniques (8)</button>
             <button class="vocab-filter-pill" data-textfilter="3" onclick="filterStudentVocab(3)">Text 3: False Lion King (8)</button>
@@ -593,9 +593,9 @@
           <div style="background: var(--bg-card); padding: 24px 30px; border-radius: 14px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
             <div>
               <h2 style="font-size: 1.6rem; font-weight: 900; color: var(--text-main); margin-bottom: 4px;">🎯 TKA Strategy Guide</h2>
-              <p style="font-size: 0.95rem; color: var(--text-muted);">12 Formula dan langkah sistematis dalam menjawab soal TKA 2025.</p>
+              <p style="font-size: 0.95rem; color: var(--text-muted);">12 Systematic reading formulas and actionable steps for solving TKA questions.</p>
             </div>
-            <button class="btn btn-secondary btn-sm" onclick="setStudentView('dashboard')">← Kembali ke Dashboard</button>
+            <button class="btn btn-secondary btn-sm" onclick="setStudentView('dashboard')">← Back to Dashboard</button>
           </div>
 
           <div class="strategy-grid" id="student-strategy-cards-container"></div>
@@ -614,13 +614,13 @@
     <!-- Modals -->
     <div class="modal-overlay" id="student-reset-modal">
       <div class="modal-content">
-        <h3 style="font-size: 1.35rem; font-weight: 800; color: var(--accent-red); margin-bottom: 12px;">⚠️ Reset Lembar Kerja Siswa?</h3>
+        <h3 style="font-size: 1.35rem; font-weight: 800; color: var(--accent-red); margin-bottom: 12px;">⚠️ Reset Student Worksheet?</h3>
         <p style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 24px; line-height: 1.6;">
-          Apakah Anda yakin ingin mengulang dan menghapus semua jawaban serta alasan yang telah Anda tulis?
+          Are you sure you want to reset and clear all your answers and written reasoning?
         </p>
         <div style="display: flex; justify-content: flex-end; gap: 12px;">
-          <button class="btn btn-secondary" onclick="closeStudentModal('student-reset-modal')">Batal</button>
-          <button class="btn btn-danger" onclick="confirmStudentReset()">Ya, Reset Lembar Kerja</button>
+          <button class="btn btn-secondary" onclick="closeStudentModal('student-reset-modal')">Cancel</button>
+          <button class="btn btn-danger" onclick="confirmStudentReset()">Yes, Reset Worksheet</button>
         </div>
       </div>
     </div>
@@ -636,15 +636,15 @@
       </button>
       <button class="mobile-nav-item" data-mobview="vocab_lab" onclick="setStudentView('vocab_lab')">
         <span class="mobile-nav-icon">📚</span>
-        <span class="mobile-nav-label">Kosakata</span>
+        <span class="mobile-nav-label">Vocabulary</span>
       </button>
       <button class="mobile-nav-item" data-mobview="tka_strategy" onclick="setStudentView('tka_strategy')">
         <span class="mobile-nav-icon">🎯</span>
-        <span class="mobile-nav-label">Strategi</span>
+        <span class="mobile-nav-label">Strategy</span>
       </button>
       <button class="mobile-nav-item" data-mobview="worksheet_summary" onclick="setStudentView('worksheet_summary')">
         <span class="mobile-nav-icon">📋</span>
-        <span class="mobile-nav-label">Jawaban</span>
+        <span class="mobile-nav-label">Worksheet</span>
       </button>
     </nav>
 
