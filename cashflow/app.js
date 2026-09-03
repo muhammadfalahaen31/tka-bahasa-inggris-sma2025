@@ -29,6 +29,8 @@ var AppState = {
     ]
   },
   editingTransactionId: null,
+    editingSavingId: null,
+    editingInstallmentId: null,
   charts: {
     trend: null,
     category: null,
@@ -1071,7 +1073,10 @@ function renderSavingsModule() {
       '<div>' +
       '<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">' +
       '<span class="badge ' + (s.isEmergencyFund ? 'badge-purple' : 'badge-blue') + '">' + (s.isEmergencyFund ? '🛡️ Dana Darurat' : '🎯 Target Tabungan') + '</span>' +
-      '<button class="btn btn-secondary btn-sm" data-id="' + s.id + '" onclick="confirmDeleteSaving(this.dataset.id)" title="Hapus">✕</button>' +
+      '<div style="display: flex; gap: 4px;">' +
+      '<button class="btn btn-secondary btn-sm" data-id="' + s.id + '" onclick="openEditSavingModal(this.dataset.id)" title="Edit Target Tabungan">✏️</button>' +
+      '<button class="btn btn-danger btn-sm" data-id="' + s.id + '" onclick="confirmDeleteSaving(this.dataset.id)" title="Hapus Tabungan">✕</button>' +
+      '</div>' +
       '</div>' +
       '<h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 4px;">' + escapeHtml(s.name) + '</h3>' +
       '<p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 14px;">' + escapeHtml(s.notes || '-') + '</p>' +
@@ -1087,6 +1092,7 @@ function renderSavingsModule() {
       '</div>' +
       '<div style="display: flex; gap: 8px; margin-top: 18px;">' +
       '<button class="btn btn-outline btn-sm" style="flex: 1;" data-id="' + s.id + '" onclick="openDepositSavingModal(this.dataset.id)">➕ Setor Dana</button>' +
+      '<button class="btn btn-secondary btn-sm" data-id="' + s.id + '" onclick="openEditSavingModal(this.dataset.id)" title="Edit Target Tabungan">✏️ Edit</button>' +
       '</div>' +
       '</div>';
   }).join('');
@@ -1137,7 +1143,8 @@ function renderInstallmentsModule() {
       '<td>' +
       '<div style="display: flex; gap: 6px;">' +
       '<button class="btn btn-primary btn-sm" data-id="' + i.id + '" onclick="payInstallmentPrompt(this.dataset.id)" title="Catat Pembayaran Bulan Ini">💳 Bayar</button>' +
-      '<button class="btn btn-danger btn-sm" data-id="' + i.id + '" onclick="confirmDeleteInstallment(this.dataset.id)">🗑️</button>' +
+      '<button class="btn btn-secondary btn-sm" data-id="' + i.id + '" onclick="openEditInstallmentModal(this.dataset.id)" title="Edit Cicilan Bulanan">✏️ Edit</button>' +
+      '<button class="btn btn-danger btn-sm" data-id="' + i.id + '" onclick="confirmDeleteInstallment(this.dataset.id)" title="Hapus">🗑️</button>' +
       '</div>' +
       '</td>' +
       '</tr>';
@@ -1791,6 +1798,55 @@ async function executeCopyMonthTransactions() {
 // -------------------------------------------------------------
 // SAVINGS CRUD & SETOR DANA
 // -------------------------------------------------------------
+function openAddSavingModal() {
+  AppState.editingSavingId = null;
+  var titleEl = document.getElementById('saving-modal-title');
+  if (titleEl) titleEl.textContent = 'Buat Target Tabungan Baru';
+  var btnEl = document.getElementById('saving-btn-submit');
+  if (btnEl) btnEl.textContent = 'Simpan Target';
+
+  var nameInp = document.getElementById('saving-name');
+  if (nameInp) nameInp.value = '';
+  var targetInp = document.getElementById('saving-target');
+  if (targetInp) targetInp.value = '';
+  var curInp = document.getElementById('saving-current');
+  if (curInp) curInp.value = '';
+  var dateInp = document.getElementById('saving-deadline');
+  if (dateInp) dateInp.value = '';
+  var emgCb = document.getElementById('saving-is-emergency');
+  if (emgCb) emgCb.checked = false;
+  var notesInp = document.getElementById('saving-notes');
+  if (notesInp) notesInp.value = '';
+
+  openModal('modal-add-saving');
+}
+
+function openEditSavingModal(savingId) {
+  var s = AppState.savings.find(function(item) { return item.id === savingId; });
+  if (!s) return;
+
+  AppState.editingSavingId = savingId;
+  var titleEl = document.getElementById('saving-modal-title');
+  if (titleEl) titleEl.textContent = 'Edit Target Tabungan';
+  var btnEl = document.getElementById('saving-btn-submit');
+  if (btnEl) btnEl.textContent = 'Simpan Perubahan';
+
+  var nameInp = document.getElementById('saving-name');
+  if (nameInp) nameInp.value = s.name || '';
+  var targetInp = document.getElementById('saving-target');
+  if (targetInp) targetInp.value = formatRupiah(s.targetAmount);
+  var curInp = document.getElementById('saving-current');
+  if (curInp) curInp.value = formatRupiah(s.currentAmount);
+  var dateInp = document.getElementById('saving-deadline');
+  if (dateInp) dateInp.value = s.deadline || '';
+  var emgCb = document.getElementById('saving-is-emergency');
+  if (emgCb) emgCb.checked = !!s.isEmergencyFund;
+  var notesInp = document.getElementById('saving-notes');
+  if (notesInp) notesInp.value = s.notes || '';
+
+  openModal('modal-add-saving');
+}
+
 async function handleSavingFormSubmit(e) {
   if (e) e.preventDefault();
   try {
@@ -1806,6 +1862,29 @@ async function handleSavingFormSubmit(e) {
       return;
     }
 
+    if (AppState.editingSavingId) {
+      // EDIT EXISTING SAVING
+      var sIdx = AppState.savings.findIndex(function(s) { return s.id === AppState.editingSavingId; });
+      if (sIdx !== -1) {
+        var existing = AppState.savings[sIdx];
+        existing.name = name;
+        existing.targetAmount = target;
+        existing.currentAmount = current;
+        existing.deadline = deadline;
+        existing.notes = notes;
+        existing.isEmergencyFund = isEmergency;
+        existing.updatedAt = new Date().toISOString();
+
+        await window.DB.put('savings', existing);
+        closeModal('modal-add-saving');
+        showToast('Target tabungan "' + name + '" berhasil diperbarui!', 'success');
+        AppState.editingSavingId = null;
+        renderApp();
+        return;
+      }
+    }
+
+    // CREATE NEW SAVING
     var savingObj = {
       id: window.DB.generateId('sav'),
       name: name,
@@ -1814,7 +1893,8 @@ async function handleSavingFormSubmit(e) {
       deadline: deadline,
       notes: notes,
       isEmergencyFund: isEmergency,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     };
 
     AppState.savings.push(savingObj);
@@ -1823,7 +1903,7 @@ async function handleSavingFormSubmit(e) {
     showToast('Target tabungan berhasil dibuat!', 'success');
     renderApp();
   } catch (err) {
-    showToast('Gagal membuat target tabungan: ' + err.message, 'error');
+    showToast('Gagal menyimpan target tabungan: ' + err.message, 'error');
   }
 }
 
@@ -1891,6 +1971,59 @@ async function confirmDeleteSaving(id) {
 // -------------------------------------------------------------
 // INSTALLMENTS CRUD & BAYAR CICILAN
 // -------------------------------------------------------------
+function openAddInstallmentModal() {
+  AppState.editingInstallmentId = null;
+  var titleEl = document.getElementById('inst-modal-title');
+  if (titleEl) titleEl.textContent = 'Tambah Cicilan Bulanan';
+  var btnEl = document.getElementById('inst-btn-submit');
+  if (btnEl) btnEl.textContent = 'Simpan Cicilan';
+
+  var nameInp = document.getElementById('inst-name');
+  if (nameInp) nameInp.value = '';
+  var typeSel = document.getElementById('inst-type');
+  if (typeSel) typeSel.value = 'Rumah';
+  var totInp = document.getElementById('inst-total');
+  if (totInp) totInp.value = '';
+  var remInp = document.getElementById('inst-remaining');
+  if (remInp) remInp.value = '';
+  var monInp = document.getElementById('inst-monthly');
+  if (monInp) monInp.value = '';
+  var dateInp = document.getElementById('inst-date');
+  if (dateInp) dateInp.value = '';
+  var notesInp = document.getElementById('inst-notes');
+  if (notesInp) notesInp.value = '';
+
+  openModal('modal-add-installment');
+}
+
+function openEditInstallmentModal(installmentId) {
+  var inst = AppState.installments.find(function(item) { return item.id === installmentId; });
+  if (!inst) return;
+
+  AppState.editingInstallmentId = installmentId;
+  var titleEl = document.getElementById('inst-modal-title');
+  if (titleEl) titleEl.textContent = 'Edit Cicilan Bulanan';
+  var btnEl = document.getElementById('inst-btn-submit');
+  if (btnEl) btnEl.textContent = 'Simpan Perubahan';
+
+  var nameInp = document.getElementById('inst-name');
+  if (nameInp) nameInp.value = inst.name || '';
+  var typeSel = document.getElementById('inst-type');
+  if (typeSel) typeSel.value = inst.type || 'Lainnya';
+  var totInp = document.getElementById('inst-total');
+  if (totInp) totInp.value = formatRupiah(inst.totalLoan);
+  var remInp = document.getElementById('inst-remaining');
+  if (remInp) remInp.value = formatRupiah(inst.remainingLoan);
+  var monInp = document.getElementById('inst-monthly');
+  if (monInp) monInp.value = formatRupiah(inst.monthlyAmount);
+  var dateInp = document.getElementById('inst-date');
+  if (dateInp) dateInp.value = inst.paymentDate || '';
+  var notesInp = document.getElementById('inst-notes');
+  if (notesInp) notesInp.value = inst.notes || '';
+
+  openModal('modal-add-installment');
+}
+
 async function handleInstallmentFormSubmit(e) {
   if (e) e.preventDefault();
   try {
@@ -1907,6 +2040,30 @@ async function handleInstallmentFormSubmit(e) {
       return;
     }
 
+    if (AppState.editingInstallmentId) {
+      // EDIT EXISTING INSTALLMENT
+      var iIdx = AppState.installments.findIndex(function(i) { return i.id === AppState.editingInstallmentId; });
+      if (iIdx !== -1) {
+        var existing = AppState.installments[iIdx];
+        existing.name = name;
+        existing.type = type;
+        existing.totalLoan = totalLoan;
+        existing.remainingLoan = remainingLoan || (totalLoan > 0 ? totalLoan : existing.remainingLoan);
+        existing.monthlyAmount = monthlyAmount; // User can update monthly amount anytime!
+        existing.paymentDate = paymentDate || '10';
+        existing.notes = notes;
+        existing.updatedAt = new Date().toISOString();
+
+        await window.DB.put('installments', existing);
+        closeModal('modal-add-installment');
+        showToast('Cicilan bulanan "' + name + '" berhasil diperbarui!', 'success');
+        AppState.editingInstallmentId = null;
+        renderApp();
+        return;
+      }
+    }
+
+    // CREATE NEW INSTALLMENT
     var instObj = {
       id: window.DB.generateId('inst'),
       name: name,
@@ -1917,16 +2074,17 @@ async function handleInstallmentFormSubmit(e) {
       paymentDate: paymentDate || '10',
       status: 'Aktif',
       notes: notes,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     };
 
     AppState.installments.push(instObj);
     await window.DB.put('installments', instObj);
     closeModal('modal-add-installment');
-    showToast('Cicilan berhasil ditambahkan!', 'success');
+    showToast('Cicilan bulanan berhasil ditambahkan!', 'success');
     renderApp();
   } catch (err) {
-    showToast('Gagal menambahkan cicilan: ' + err.message, 'error');
+    showToast('Gagal menyimpan cicilan: ' + err.message, 'error');
   }
 }
 
@@ -2210,6 +2368,10 @@ window.closeModal = closeModal;
 window.toggleTheme = toggleTheme;
 window.toggleMobileSidebar = toggleMobileSidebar;
 window.closeMobileSidebar = closeMobileSidebar;
+window.openAddSavingModal = openAddSavingModal;
+window.openEditSavingModal = openEditSavingModal;
+window.openAddInstallmentModal = openAddInstallmentModal;
+window.openEditInstallmentModal = openEditInstallmentModal;
 window.handleSavingFormSubmit = handleSavingFormSubmit;
 window.openDepositSavingModal = openDepositSavingModal;
 window.handleDepositSavingSubmit = handleDepositSavingSubmit;
