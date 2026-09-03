@@ -1339,3 +1339,83 @@ a {
   color: var(--accent-rose);
   border-color: var(--accent-rose);
 }
+
+/* =============================================================================
+   FAMILY BACKGROUND & LOGO CUSTOM STYLING
+   ============================================================================= */
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: url('assets/family-bg.jpg') center center / cover no-repeat fixed;
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: -1;
+}
+
+[data-theme="dark"] body::before {
+  opacity: 0.04;
+}
+
+.brand-avatar-img {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2.5px solid var(--primary-blue);
+  box-shadow: 0 0 12px rgba(37, 99, 235, 0.35);
+  display: block;
+}
+
+.pin-avatar-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3.5px solid #38bdf8;
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.6);
+  display: block;
+  margin: 0 auto;
+}
+
+.pin-lock-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.88) 0%, rgba(15, 23, 42, 0.94) 100%), url('assets/family-bg.jpg') center center / cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  backdrop-filter: blur(14px);
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+.family-hero-card {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 58, 138, 0.82) 100%), url('assets/family-bg.jpg') center center / cover no-repeat;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-xl);
+  padding: 22px 26px;
+  margin-bottom: 22px;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.family-hero-card::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, transparent 70%);
+  pointer-events: none;
+}

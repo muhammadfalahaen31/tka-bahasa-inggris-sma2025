@@ -19,7 +19,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=3.0">
+  <link rel="stylesheet" href="style.css?v=3.1">
 </head>
 <body>
 
@@ -28,7 +28,9 @@
        ========================================== -->
   <div id="pin-lock-overlay" class="pin-lock-overlay">
     <div class="pin-card">
-      <div class="pin-avatar-box">🔒</div>
+      <div style="margin-bottom: 16px;">
+        <img src="assets/family-logo.jpg" alt="Logo Keluarga Faletsa" class="pin-avatar-img">
+      </div>
       <h2 class="pin-title">Keluarga Faletsa</h2>
       <p class="pin-subtitle">Masukkan 6 Digit PIN Keamanan</p>
 
@@ -68,10 +70,10 @@
          ========================================== -->
     <aside class="sidebar">
       <div class="sidebar-brand">
-        <div class="brand-icon-box">💰</div>
+        <img src="assets/family-logo.jpg" alt="Logo Keluarga Faletsa" class="brand-avatar-img">
         <div class="brand-text">
           <h1>Cashflow Faletsa</h1>
-          <span>Keuangan Keluarga</span>
+          <span>Keluarga Faletsa</span>
         </div>
       </div>
 
@@ -204,6 +206,23 @@
              1. DASHBOARD VIEW
              ========================================== -->
         <section id="view-dashboard" class="view-section active">
+
+          <!-- FAMILY HERO BANNER -->
+          <div class="family-hero-card">
+            <div style="display: flex; align-items: center; gap: 16px; position: relative; z-index: 1;">
+              <img src="assets/family-logo.jpg" alt="Keluarga Faletsa" style="width: 58px; height: 58px; border-radius: 50%; object-fit: cover; border: 2.5px solid #38bdf8; box-shadow: 0 0 14px rgba(56, 189, 248, 0.5);">
+              <div>
+                <h2 style="font-size: 1.3rem; font-weight: 800; color: #ffffff; margin-bottom: 3px;">Keluarga Faletsa</h2>
+                <p style="font-size: 0.84rem; color: #cbd5e1; margin: 0;">Dashboard Keuangan Rumah Tangga • Suami & Istri</p>
+              </div>
+            </div>
+            <div style="position: relative; z-index: 1; display: flex; align-items: center; gap: 10px;">
+              <span class="cloud-sync-badge badge-cloud-online" style="background: rgba(16, 185, 129, 0.2); border-color: #10b981; color: #6ee7b7; padding: 5px 12px;">
+                <span class="cloud-dot dot-online"></span>
+                <span>Online Realtime Sync</span>
+              </span>
+            </div>
+          </div>
 
           <!-- SMART EMPTY MONTH COPY BANNER -->
           <div id="dash-empty-month-banner" style="display: none; background: var(--primary-blue-light); border: 1.5px solid var(--primary-blue); border-radius: var(--radius-lg); padding: 16px 20px; margin-bottom: 22px; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
@@ -1094,10 +1113,10 @@
   <div class="toast-container" id="toast-container"></div>
 
   <!-- App Core Scripts -->
-  <script src="firebase-config.js?v=3.0"></script>
-  <script src="storage.js?v=3.0"></script>
-  <script src="demo-data.js?v=3.0"></script>
-  <script src="app.js?v=3.0"></script>
+  <script src="firebase-config.js?v=3.1"></script>
+  <script src="storage.js?v=3.1"></script>
+  <script src="demo-data.js?v=3.1"></script>
+  <script src="app.js?v=3.1"></script>
 
 </body>
 </html>
