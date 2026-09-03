@@ -1,9 +1,9 @@
 /**
  * Cashflow Keuangan Keluarga Faletsa — Firebase Realtime Cloud Sync
  * Multi-device synchronization service for Husband & Wife (Keluarga Faletsa).
+ * Features: Bulletproof ID-based Bi-directional Merging & Anti-Data Loss Protection.
  */
 
-// Firebase Project Credentials
 var firebaseConfig = {
   apiKey: "AIzaSyCocJJXa8oTPc5uxxvlP16I9qX-ujVaK34",
   authDomain: "tka-english-wajib-2025.firebaseapp.com",
@@ -21,8 +21,8 @@ var CloudSync = {
   unsubscribeListener: null,
   collectionName: 'faletsa_family_finance',
   docId: 'main_dashboard',
+  _isSyncing: false,
 
-  // Initialize Firebase Firestore safely
   init: function(onRemoteUpdateCallback) {
     var self = this;
     try {
@@ -32,20 +32,14 @@ var CloudSync = {
         }
         self.db = firebase.firestore();
         
-        // Enable offline persistence in Firestore if possible
         try {
-          self.db.enablePersistence({ synchronizeTabs: true }).catch(function(err) {
-            console.warn('Firestore persistence warning:', err.code);
-          });
-        } catch (e) {
-          // ignore if already enabled
-        }
+          self.db.enablePersistence({ synchronizeTabs: true }).catch(function(err) {});
+        } catch (e) {}
 
         self.isInitialized = true;
         self.isOnline = navigator.onLine;
-        console.log('✅ [Firebase CloudSync] Firestore berhasil diinisialisasi.');
+        console.log('✅ [Firebase CloudSync] Firestore Database berhasil terhubung.');
 
-        // Setup Network Status Listeners
         window.addEventListener('online', function() {
           self.isOnline = true;
           self.updateCloudStatusBadge(true);
@@ -58,21 +52,19 @@ var CloudSync = {
 
         self.updateCloudStatusBadge(self.isOnline);
 
-        // Start Realtime Cloud Listener
         if (onRemoteUpdateCallback) {
           self.startRealtimeListener(onRemoteUpdateCallback);
         }
       } else {
-        console.warn('⚠️ [Firebase CloudSync] Firebase SDK tidak terdeteksi. Berjalan dalam mode offline lokal.');
+        console.warn('⚠️ [Firebase CloudSync] Firebase SDK offline fallback.');
         self.updateCloudStatusBadge(false);
       }
     } catch (err) {
-      console.error('❌ [Firebase CloudSync] Gagal inisialisasi:', err);
+      console.error('❌ [Firebase CloudSync] Inisialisasi error:', err);
       self.updateCloudStatusBadge(false);
     }
   },
 
-  // Realtime Cloud Listener (Husband <-> Wife Auto Sync)
   startRealtimeListener: function(callback) {
     var self = this;
     if (!self.isInitialized || !self.db) return;
@@ -81,51 +73,101 @@ var CloudSync = {
       self.unsubscribeListener = self.db.collection(self.collectionName).doc(self.docId)
         .onSnapshot({ includeMetadataChanges: false }, function(doc) {
           if (doc.exists) {
-            var data = doc.data();
-            console.log('🔄 [Firebase CloudSync] Data baru diterima dari Cloud!');
+            var cloudData = doc.data();
+            console.log('🔄 [Firebase CloudSync] Menerima data realtime dari Cloud.');
             if (typeof callback === 'function') {
-              callback(data);
+              callback(cloudData);
             }
           } else {
-            console.log('ℹ️ [Firebase CloudSync] Dokumen cloud belum ada. Melakukan inisialisasi cloud...');
+            console.log('ℹ️ [Firebase CloudSync] Inisialisasi awal dokumen cloud...');
             self.syncLocalToCloud();
           }
         }, function(error) {
-          console.warn('⚠️ [Firebase CloudSync] Listener error (kemungkinan offline):', error);
+          console.warn('⚠️ [Firebase CloudSync] Snapshot listener warning:', error);
         });
     } catch (e) {
-      console.error('Error starting snapshot listener:', e);
+      console.error('Snapshot listener error:', e);
     }
   },
 
-  // Push local data to Cloud Firestore
+  // Push with safe merging on Firestore
   pushToCloud: async function(payload) {
     var self = this;
-    if (!self.isInitialized || !self.db) return false;
+    if (!self.isInitialized || !self.db || self._isSyncing) return false;
 
+    self._isSyncing = true;
     try {
+      var docRef = self.db.collection(self.collectionName).doc(self.docId);
+      var cloudDoc = await docRef.get().catch(function() { return null; });
+      var cloudData = cloudDoc && cloudDoc.exists ? cloudDoc.data() : null;
+
+      // Merge local and cloud transactions by ID
+      var mergedTxs = self.mergeArraysById(
+        cloudData ? cloudData.transactions : [],
+        payload.transactions || []
+      );
+
+      var mergedSav = self.mergeArraysById(
+        cloudData ? cloudData.savings : [],
+        payload.savings || []
+      );
+
+      var mergedInst = self.mergeArraysById(
+        cloudData ? cloudData.installments : [],
+        payload.installments || []
+      );
+
       var dataToSave = {
-        transactions: payload.transactions || [],
-        savings: payload.savings || [],
-        installments: payload.installments || [],
-        settings: payload.settings || {},
+        transactions: mergedTxs,
+        savings: mergedSav,
+        installments: mergedInst,
+        settings: Object.assign({}, cloudData ? cloudData.settings : {}, payload.settings || {}),
         lastUpdatedBy: payload.author || 'Keluarga Faletsa',
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
         clientTimestamp: new Date().toISOString()
       };
 
-      await self.db.collection(self.collectionName).doc(self.docId).set(dataToSave, { merge: true });
-      console.log('☁️ [Firebase CloudSync] Data berhasil disimpan ke Cloud.');
-      self.updateCloudStatusBadge(true, 'Tersinkron Cloud');
+      await docRef.set(dataToSave, { merge: true });
+      console.log('☁️ [Firebase CloudSync] Berhasil tersimpan ke Cloud (' + mergedTxs.length + ' transaksi).');
+      self.updateCloudStatusBadge(true, 'Cloud Sync Aktif');
+      self._isSyncing = false;
       return true;
     } catch (err) {
-      console.error('❌ [Firebase CloudSync] Gagal menyimpan ke cloud:', err);
+      console.error('❌ [Firebase CloudSync] Gagal simpan ke cloud:', err);
       self.updateCloudStatusBadge(false, 'Gagal Sinkron Cloud');
+      self._isSyncing = false;
       return false;
     }
   },
 
-  // Sync entire local DB to Cloud
+  // Smart ID-based Union Merge
+  mergeArraysById: function(cloudList, localList) {
+    var cList = Array.isArray(cloudList) ? cloudList : [];
+    var lList = Array.isArray(localList) ? localList : [];
+
+    var map = {};
+    // Add cloud items
+    cList.forEach(function(item) {
+      if (item && item.id) map[item.id] = item;
+    });
+
+    // Merge local items (prefer newer updatedAt if both exist)
+    lList.forEach(function(item) {
+      if (!item || !item.id) return;
+      if (!map[item.id]) {
+        map[item.id] = item;
+      } else {
+        var localTime = new Date(item.updatedAt || 0).getTime();
+        var cloudTime = new Date(map[item.id].updatedAt || 0).getTime();
+        if (localTime >= cloudTime) {
+          map[item.id] = item;
+        }
+      }
+    });
+
+    return Object.values(map);
+  },
+
   syncLocalToCloud: async function() {
     var self = this;
     if (!self.isInitialized || !window.DB) return;
@@ -133,11 +175,10 @@ var CloudSync = {
       var localData = await window.DB.exportAllData();
       await self.pushToCloud(localData);
     } catch (e) {
-      console.warn('syncLocalToCloud error:', e);
+      console.warn('syncLocalToCloud warning:', e);
     }
   },
 
-  // Update visual sync badge in UI
   updateCloudStatusBadge: function(isSynced, customText) {
     var badges = document.querySelectorAll('.cloud-sync-badge');
     badges.forEach(function(el) {

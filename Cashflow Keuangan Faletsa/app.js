@@ -256,27 +256,42 @@ async function reloadStateData() {
 // Real-time Cloud Update Handler (When spouse saves data on other device)
 async function handleRemoteCloudUpdate(remoteData) {
   try {
-    if (remoteData.transactions && Array.isArray(remoteData.transactions)) {
-      AppState.transactions = remoteData.transactions;
+    if (!remoteData) return;
+
+    var prevCount = AppState.transactions.length;
+
+    // Smart Bi-directional Merging: never lose local records!
+    if (window.CloudSync && window.CloudSync.mergeArraysById) {
+      if (Array.isArray(remoteData.transactions)) {
+        AppState.transactions = window.CloudSync.mergeArraysById(remoteData.transactions, AppState.transactions);
+      }
+      if (Array.isArray(remoteData.savings)) {
+        AppState.savings = window.CloudSync.mergeArraysById(remoteData.savings, AppState.savings);
+      }
+      if (Array.isArray(remoteData.installments)) {
+        AppState.installments = window.CloudSync.mergeArraysById(remoteData.installments, AppState.installments);
+      }
+    } else {
+      if (remoteData.transactions && remoteData.transactions.length > 0) {
+        AppState.transactions = remoteData.transactions;
+      }
     }
-    if (remoteData.savings && Array.isArray(remoteData.savings)) {
-      AppState.savings = remoteData.savings;
-    }
-    if (remoteData.installments && Array.isArray(remoteData.installments)) {
-      AppState.installments = remoteData.installments;
-    }
+
     if (remoteData.settings && typeof remoteData.settings === 'object') {
       var keys = Object.keys(remoteData.settings);
       keys.forEach(function(k) { AppState.settings[k] = remoteData.settings[k]; });
     }
 
-    // Update local cache silently
+    // Persist merged state to local storage & indexedDB
     localStorage.setItem('faletsa_cashflow_local_backup_v1_transactions', JSON.stringify(AppState.transactions));
     localStorage.setItem('faletsa_cashflow_local_backup_v1_savings', JSON.stringify(AppState.savings));
     localStorage.setItem('faletsa_cashflow_local_backup_v1_installments', JSON.stringify(AppState.installments));
 
     renderApp();
-    showToast('☁️ Data diperbarui otomatis dari Cloud!', 'info');
+    
+    if (AppState.transactions.length !== prevCount) {
+      showToast('☁️ Data disinkronkan dari Cloud (' + AppState.transactions.length + ' transaksi aktif).', 'info');
+    }
   } catch (err) {
     console.warn('Handle remote cloud update error:', err);
   }
