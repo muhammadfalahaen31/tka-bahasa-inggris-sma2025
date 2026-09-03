@@ -229,14 +229,8 @@ async function initCashflowApp() {
       });
     }
 
-    // Check if first-time user (empty state) -> offer demo data
-    if (AppState.transactions.length === 0 && !AppState.settings.isDemoActive) {
-      var hasPrompted = localStorage.getItem('faletsa_demo_prompted');
-      if (!hasPrompted) {
-        localStorage.setItem('faletsa_demo_prompted', 'true');
-        await loadDemoData(true);
-      }
-    }
+    // Purge any remaining demo dummy data if present
+    await purgeDemoDataIfPresent();
 
     applyTheme(AppState.settings.theme || 'light');
     setupEventListeners();
@@ -344,14 +338,59 @@ function renderCurrentView() {
 }
 
 function renderApp() {
-  updateDemoBanner();
   renderCurrentView();
 }
 
-function updateDemoBanner() {
-  var banner = document.getElementById('demo-mode-banner');
-  if (banner) {
-    banner.style.display = AppState.settings.isDemoActive ? 'flex' : 'none';
+async function purgeDemoDataIfPresent() {
+  try {
+    var hasDemo = false;
+    var filteredTxs = AppState.transactions.filter(function(t) {
+      if (t.isDemo || (t.id && t.id.startsWith('tx_demo_'))) {
+        hasDemo = true;
+        return false;
+      }
+      return true;
+    });
+
+    var filteredSav = AppState.savings.filter(function(s) {
+      if (s.isDemo || (s.id && s.id.startsWith('sav_demo_'))) {
+        hasDemo = true;
+        return false;
+      }
+      return true;
+    });
+
+    var filteredInst = AppState.installments.filter(function(i) {
+      if (i.isDemo || (i.id && i.id.startsWith('inst_demo_'))) {
+        hasDemo = true;
+        return false;
+      }
+      return true;
+    });
+
+    if (hasDemo) {
+      AppState.transactions = filteredTxs;
+      AppState.savings = filteredSav;
+      AppState.installments = filteredInst;
+      AppState.settings.isDemoActive = false;
+
+      // Update local storage
+      await window.DB.clear('transactions');
+      for (var t = 0; t < filteredTxs.length; t++) {
+        await window.DB.put('transactions', filteredTxs[t]);
+      }
+      await window.DB.clear('savings');
+      for (var s = 0; s < filteredSav.length; s++) {
+        await window.DB.put('savings', filteredSav[s]);
+      }
+      await window.DB.clear('installments');
+      for (var k = 0; k < filteredInst.length; k++) {
+        await window.DB.put('installments', filteredInst[k]);
+      }
+      console.log('✅ [Data Clean] Seluruh data demo berhasil dibersihkan.');
+    }
+  } catch (e) {
+    console.warn('Purge demo data error:', e);
   }
 }
 
